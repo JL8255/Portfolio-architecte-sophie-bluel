@@ -75,3 +75,24 @@ function generateFiltre(categories) {
 generateFiltre(categories);
 // sélection du bouton "Tous" par défaut
 const baliseInputTous = document.getElementById("Tous").checked = true;
+
+//---------- Création de la fonction de filtrage selon le bouton cliqué -------------------------
+
+let boutonChecked = "";
+const boutonFiltrer = document.querySelector("#Ul-filtre");
+boutonFiltrer.addEventListener("click", function () {
+    let boutonRadio = document.querySelectorAll('input[name="lienfiltre"]')
+    for (let i = 0; i < boutonRadio.length; i++) {
+        if (boutonRadio[i].checked) {
+            boutonChecked = boutonRadio[i].value;
+            break
+        }
+    }
+    const worksFiltres = works.filter(function (work) {
+        return work.category.name === boutonChecked;
+    });
+if (boutonChecked === "Tous") {
+    generateGallery(works)
+} else {
+generateGallery(worksFiltres)};
+});
