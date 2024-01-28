@@ -27,3 +27,15 @@ function generateGallery(works) {
 };
 //--> Appel de la methode pour le 1er affichage
 generateGallery(works);
+
+//---------- Récupération des catégories depuis le Backend ---------------------------------------
+
+const reponse_c = await fetch("http://localhost:5678/api/categories");
+const categories = await reponse_c.json();
+
+/*Autre méthode pour récupérer la liste des catégories avec la fonction map et l'objet Set :
+const mapcategories = works.map(work => work.category);
+console.log(mapcategories)
+const monSet = new Set();
+mapcategories.forEach((element) => monSet.add(element));
+console.log(monSet)*/
