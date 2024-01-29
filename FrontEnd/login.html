@@ -10,6 +10,7 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="icon" type="image/png" href="./assets/icons/favicon-256x256.png">
+    <script type="module" src="./login.js"></script>
 </head>
 <body>
     <header>
@@ -26,14 +27,20 @@
     <main>
         <section id="login">
             <h2>Log In</h2>
-            <form id="login_form" action="#" method="post">
+            <form id="login_form" action="" method="post">
                 <label for="email">E-mail</label>
-                <input type="text" name="email" id="email">
-                <label for="mdp">Mot de passe</label>
-                <input type="mdp" name="mdp" id="mdp">
-                <input type="submit" value="Envoyer">
-                <a href="#">Mot de passe oublié ?</a>
+                <input id="email" type="email" name="email">
+                    <p id="format">Format E-mail incorrecte !</p>
+                <label for="password">Mot de passe</label>
+                <input id="password" type="password" name="password">
+                <input id="envoyer" type="submit" value="Envoyer">
             </form>
+            <div id="message">
+                <!-- code injected by js -->
+            </div>            
+            <div>
+                <a href="#">Mot de passe oublié ?</a>
+            </div>
         </section>
     </main>
     <footer id="login_footer">

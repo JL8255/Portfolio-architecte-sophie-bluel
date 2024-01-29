@@ -224,6 +224,18 @@ input[type="radio"]:hover + label  {
 #login a {
 	text-align: center;
 }
+#format {
+	color:red;
+}
+#message {
+	color: red;
+	margin-bottom: 10px;
+}
+#message a, p {
+	display: block;
+	color: red;
+	line-height: 20px;
+}
 #contact h2 {
 	margin-bottom: 20px;
 }
