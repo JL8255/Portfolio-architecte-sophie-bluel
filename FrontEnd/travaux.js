@@ -1,7 +1,37 @@
+//Vérification : si l'utilisateur est connecté, logout s'affiche à la place de login
+
+if (window.localStorage.getItem("token") !== null) {
+    const baliseLogout = document.getElementById("logout");
+    baliseLogout.innerText ="Logout";
+    baliseLogout.style = "color:#B1663C";
+    baliseLogout.href = "#";
+};
+
+//Login s'affiche si l'utilisateur se déconnecte en cliquant sur logout
+
+const baliseLogin = document.getElementById("logout")
+baliseLogin.addEventListener("click", function () {
+    if (window.localStorage.getItem("token") !== null) {
+        window.localStorage.removeItem("token");
+        baliseLogin.innerText = "";
+        document.getElementById("messagelogout").innerText = "Déconnexion";
+        setTimeout(() => {
+            document.getElementById("messagelogout").innerText = "";
+            //window.localStorage.setItem("token", null);
+            baliseLogin.style = "color:black";
+            baliseLogin.href = "./login.html";
+            baliseLogin.innerText ="Login"
+        }, 1000);
+        console.log("token="+window.localStorage.getItem("token"))
+    }
+});
+
+
 //---------- Récupération des travaux depuis le Backend ------------------------------------------
 
 const reponse_w = await fetch("http://localhost:5678/api/works");
 const works = await reponse_w.json();
+
 //---------- Fonction raccourcie de console.log --------------------------------------------------
 function c (exemple) {
     console.log(exemple)

@@ -231,7 +231,7 @@ input[type="radio"]:hover + label  {
 	color: red;
 	margin-bottom: 10px;
 }
-#message a, p {
+#message a, #message p {
 	display: block;
 	color: red;
 	line-height: 20px;
