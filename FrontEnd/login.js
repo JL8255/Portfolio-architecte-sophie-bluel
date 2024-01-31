@@ -37,22 +37,26 @@ form.addEventListener("submit", async (event) => {
         password: passwordValue
     };
     // On lance la requête au serveur
-    fetch("http://localhost:5678/api/users/password", {
-        method: 'GET',
+    await fetch("http://localhost:5678/api/users/login", {
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+            credentials: "same-origin"
         },
         body: JSON.stringify(chargeUtile)
     })
     .then(tokenReponse => {
         window.localStorage.setItem("token",tokenReponse.token);
+        console.log("Connected")
+        message.innerHTML=`<p style="color:green">Connexion réussie !</p>`
+        setTimeout(() => {/*document.location.href="index.html"*/}, 1000);
     })
-    .catch(connexion => {
-            switch (connexion) {
+    .catch(erreur => {
+        console.log(erreur)
+            switch (erreur) {
                 case 200:
                     console.log("Connected")
-                    message.innerHTML=`<p style="color:green">Connexion réussie !</p>`
-                    setTimeout(() => {/*document.location.href="index.html"*/}, 1000);
                     break
                 case 401:
                     console.log("Not Authorized")
