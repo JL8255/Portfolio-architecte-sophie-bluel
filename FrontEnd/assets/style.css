@@ -50,6 +50,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a {
+	text-decoration: none;
+	color: black;
+}
 /** end reset css**/
 html {
 	background-color: white;
@@ -67,9 +71,17 @@ header {
 	justify-content: space-between;
 	padding: 0px 150px 0px 150px;
 	margin: 0px 0px 50px 0px;
+		background-color: var(--body-bg-color);
+		position:sticky;
+		top: 0px;
+		z-index : 0;
 }
 section {
 	margin: 50px 0;
+}
+
+a:hover {
+	color:#B1663C;
 }
 
 h1{
@@ -140,6 +152,8 @@ li:hover {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+		position: sticky;
+		top: 0px;
 }
 .filtre {
 	background-color: var(--body-bg-color);
@@ -149,9 +163,10 @@ li:hover {
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 3em;
-	position:sticky;
-	top: 0px;
-	z-index:1;
+		position:sticky;
+		top: 40px;
+		z-index:1;
+
 }
 .filtre ul {
 	display: flex;
@@ -192,31 +207,56 @@ input[type="radio"]:hover + label  {
 	width: 100%;
 
 }
-#contact {
+#login {
+	height: 812px; /*1024-212*/
+}
+#login_footer {
+	position: sticky;
+	bottom: 0px;
+}
+
+#contact, #login {
 	width: 28%;
 	margin: auto;
 }
-#contact > * {
+#contact > *, #login > * {
 	text-align: center;
-
 }
-#contact h2{
+#login a {
+	text-align: center;
+}
+#format {
+	color:red;
+}
+#message {
+	color: red;
+	margin-bottom: 10px;
+}
+#message a, #message p {
+	display: block;
+	color: red;
+	line-height: 20px;
+}
+#contact h2 {
 	margin-bottom: 20px;
 }
-#contact form {
+#login h2 {
+	margin: 120px 0px 20px 0px;
+}
+#contact form, #login form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input, #login input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label, #login label {
 	margin: 2em 0 1em 0;
 }
 #contact textarea {
