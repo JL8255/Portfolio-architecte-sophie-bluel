@@ -29,10 +29,10 @@
             <h2>Log In</h2>
             <form id="login_form" action="" method="post">
                 <label for="email">E-mail</label>
-                <input id="email" type="email" name="email" required>
-                    <p id="format"></p>
+                <input id="email" type="email" name="email" required> <!-- required demande de renseigner le champs obligatoirement avant le submit-->
+                    <p id="formatEmail" style="color:red"><!-- code injected by js --></p>
                 <label for="password">Mot de passe</label>
-                <input id="password" type="password" name="password" required>
+                <input id="password" type="password" name="password" required> <!-- required demande de renseigner le champs obligatoirement avant le submit-->
                 <input id="envoyer" type="submit" value="Envoyer">
             </form>
             <div id="message">

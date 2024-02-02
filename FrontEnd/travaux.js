@@ -1,13 +1,25 @@
 //Vérification : si l'utilisateur est connecté, logout s'affiche à la place de login
 
+if (window.localStorage.getItem("token") === null) {console.log("No token exists")};
+
 if (window.localStorage.getItem("token") !== null) {
+    //--> Vérification de la date de validité du token (< à 24H)
+    const tokenTime = Date.parse(new Date()) - JSON.parse(window.localStorage.getItem("token")).date
+    if (tokenTime>86400000) {
+        console.log("token has expired :"+Math.floor(tokenTime/3600000)%24+"H"+Math.floor(tokenTime/60000)%60);
+        window.localStorage.removeItem("token");
+        console.log("--> The token has remove of localstorage !");
+    } else {
+    console.log("A valid token exists since "+Math.floor(tokenTime/3600000)%24+"H"+Math.floor(tokenTime/60000)%60)   ; 
     const baliseLogout = document.getElementById("logout");
     baliseLogout.innerText ="Logout";
     baliseLogout.style = "color:#B1663C";
     baliseLogout.href = "#";
+    console.log("--> the logout link appears instead of the login link in the navigation menu");
+    }
 };
 
-//Login s'affiche si l'utilisateur se déconnecte en cliquant sur logout
+//Login s'affiche lorsque l'utilisateur se déconnecte en cliquant sur logout
 
 const baliseLogin = document.getElementById("logout")
 baliseLogin.addEventListener("click", function () {
@@ -17,12 +29,12 @@ baliseLogin.addEventListener("click", function () {
         document.getElementById("messagelogout").innerText = "Déconnexion";
         setTimeout(() => {
             document.getElementById("messagelogout").innerText = "";
-            //window.localStorage.setItem("token", null);
             baliseLogin.style = "color:black";
             baliseLogin.href = "./login.html";
             baliseLogin.innerText ="Login"
         }, 1000);
-        console.log("token="+window.localStorage.getItem("token"))
+        console.log("The token has deleted ! token = "+window.localStorage.getItem("token"))
+        console.log("--> the login link reappears in the navigation menu");
     }
 });
 
@@ -54,9 +66,11 @@ function generateGallery(works) {
             baliseFigure.appendChild(baliseImg);
             baliseFigure.appendChild(baliseFigcaption);
     }
+    console.log("the gallery has been (re)generated")
 };
 //--> Appel de la methode pour le 1er affichage
 generateGallery(works);
+
 
 //---------- Récupération des catégories depuis le Backend ---------------------------------------
 
@@ -100,7 +114,9 @@ function generateFiltre(categories) {
         baliseLi.appendChild(baliseInput);
         baliseLi.appendChild(baliseLabel);
         baliseLabel.appendChild(baliseSpan);
-}};
+    }
+console.log("the category buttons have been generated")
+};
 //--> Appel de la methode pour le 1er affichage
 generateFiltre(categories);
 // sélection du bouton "Tous" par défaut
@@ -108,21 +124,24 @@ const baliseInputTous = document.getElementById("Tous").checked = true;
 
 //---------- Création de la fonction de filtrage selon le bouton cliqué -------------------------
 
-let boutonChecked = "";
 const boutonFiltrer = document.querySelector("#Ul-filtre");
-boutonFiltrer.addEventListener("click", function () {
+boutonFiltrer.addEventListener("change", function () {
     let boutonRadio = document.querySelectorAll('input[name="lienfiltre"]')
     for (let i = 0; i < boutonRadio.length; i++) {
         if (boutonRadio[i].checked) {
-            boutonChecked = boutonRadio[i].value;
+            var boutonChecked = boutonRadio[i].value;
             break
         }
     }
     const worksFiltres = works.filter(function (work) {
         return work.category.name === boutonChecked;
     });
-if (boutonChecked === "Tous") {
-    generateGallery(works)
-} else {
-generateGallery(worksFiltres)};
+        if (boutonChecked === "Tous") {
+            console.log("The button Tous has checked. the gallery will be completely regenerated -->");
+            generateGallery(works)
+        } else {
+        console.log("The button "+boutonChecked+" has checked. The gallery will be filtered and regenerated -->");    
+        generateGallery(worksFiltres)
+        };
 });
+
