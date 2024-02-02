@@ -1,6 +1,12 @@
-//Vérification : si l'utilisateur est connecté, logout s'affiche à la place de login
+//Vérification : si l'utilisateur est connecté, logout s'affiche à la place de login + barre "mode edition"
 
-if (window.localStorage.getItem("token") === null) {console.log("No token exists")};
+const baliseModeEdition = document.getElementById("modeEdition");
+const baliseModifier = document.getElementById("modifier");
+
+if (window.localStorage.getItem("token") === null) {
+    modeEditionNone(baliseModeEdition)
+    console.log("No token exists")
+};
 
 if (window.localStorage.getItem("token") !== null) {
     //--> Vérification de la date de validité du token (< à 24H)
@@ -8,14 +14,17 @@ if (window.localStorage.getItem("token") !== null) {
     if (tokenTime>86400000) {
         console.log("token has expired :"+Math.floor(tokenTime/3600000)%24+"H"+Math.floor(tokenTime/60000)%60);
         window.localStorage.removeItem("token");
+        baliseModeEdition.style="display:none";
+        baliseModifier.style="display:none";
         console.log("--> The token has remove of localstorage !");
     } else {
     console.log("A valid token exists since "+Math.floor(tokenTime/3600000)%24+"H"+Math.floor(tokenTime/60000)%60)   ; 
     const baliseLogout = document.getElementById("logout");
     baliseLogout.innerText ="Logout";
-    baliseLogout.style = "color:#B1663C";
     baliseLogout.href = "#";
-    console.log("--> the logout link appears instead of the login link in the navigation menu");
+    console.log("--> the logout link appears instead of the login link in the navigation menu. And edit mode activated.");
+    baliseModeEdition.style="display:flex";
+    baliseModifier.style="display:inline";
     }
 };
 
@@ -31,10 +40,12 @@ baliseLogin.addEventListener("click", function () {
             document.getElementById("messagelogout").innerText = "";
             baliseLogin.style = "color:black";
             baliseLogin.href = "./login.html";
-            baliseLogin.innerText ="Login"
+            baliseLogin.innerText ="Login";
+            baliseModeEdition.style="display:none";
+            baliseModifier.style="display:none";
         }, 1000);
         console.log("The token has deleted ! token = "+window.localStorage.getItem("token"))
-        console.log("--> the login link reappears in the navigation menu");
+        console.log("--> the login link reappears in the navigation menu. And edit mode desactivated.");
     }
 });
 
@@ -137,11 +148,12 @@ boutonFiltrer.addEventListener("change", function () {
         return work.category.name === boutonChecked;
     });
         if (boutonChecked === "Tous") {
-            console.log("The button Tous has checked. the gallery will be completely regenerated -->");
+            console.log('The button "Tous" has checked. the gallery will be completely regenerated -->');
             generateGallery(works)
         } else {
-        console.log("The button "+boutonChecked+" has checked. The gallery will be filtered and regenerated -->");    
+        console.log('The button "'+boutonChecked+'" has checked. The gallery will be filtered and regenerated -->');    
         generateGallery(worksFiltres)
         };
+    document.location.href="#portfolio";
 });
 
