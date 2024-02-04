@@ -6,12 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<script src="https://kit.fontawesome.com/ef104656d3.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="icon" type="image/png" href="./assets/icons/favicon-256x256.png">
 	<script type="module" src="./travaux.js"></script>
+	<script type="module" src="./modal.js"></script>
 </head>
 <body>
 <header>
@@ -42,11 +43,25 @@
 	<section id="portfolio">
 		<div id="title_portfolio">
 			<h2>Mes Projets</h2>
-			<a id="modifier" href="#"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
+			<a id="modifier" class="js-modal" href="#modal1"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
 		</div>
 		<div class="filtre">
 			<!-- code injected by js : function generateFiltre(categories)-->
 		</div>
+		<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
+			<div class="modal-wrapper js-modal-stop">
+				<div class="content-modal-close">
+					<button class="js-modal-close"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<h3 id="titlemodal">Galerie photo</h3>
+				<div id="contentmodal">
+					<!-- code injected by js -->
+				</div>
+				<div class="content-modalButton">
+					<button id="modalButton" type="submit">Ajouter une photo</button>
+				</div>
+			</div>
+		</aside>
 		<div class="gallery">
 			<!-- code injected by js : function generateGallery(works)-->
 		</div>
