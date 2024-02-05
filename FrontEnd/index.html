@@ -58,7 +58,32 @@
 					<!-- code injected by js -->
 				</div>
 				<div class="content-modalButton">
-					<button id="modalButton" type="submit">Ajouter une photo</button>
+					<a id="modalButton" class="js-modal" href="#modal2">Ajouter une photo</a>
+				</div>
+			</div>
+		</aside>
+		<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
+			<div class="modal-wrapper js-modal-stop">
+				<div class="content-modal-close">
+					<button class="js-modal-close"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<h3 id="titlemodal2">Ajout photo</h3>
+				<div id="contentmodal2">
+					<form action="#" method="post">
+						<label id="labelFileImage" for="fileImg">
+							<i class="fa-regular fa-image"></i>
+							<button id="ajouterPhoto">+ Ajouter photo</button>
+							<p>jpg, png : 4mo max</p>
+						</label>
+						<input type="file" id="fileImg" name="fileImg" accept=".jpg, .png" style="display:none">
+						<label for="titre">Titre</label>
+						<input type="text" name="titre" id="titre">
+						<label for="categorie">Catégorie</label>
+						<input type="text" name="categorie" id="categorie">
+					</form>
+				</div>
+				<div class="content-modalButton">
+					<button id="modal2Button" type="submit">Valider</button>
 				</div>
 			</div>
 		</aside>

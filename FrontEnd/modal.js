@@ -76,7 +76,7 @@ window.addEventListener('keydown', function (element) {
 
 
 
-//---------- Gestion de l'affichage de la galerie des photos -------------------------------------
+//---------- Gestion de l'affichage de la galerie des photos dans la modale -------------------------------------
 
 //--> Récupération des travaux depuis le Backend
 
@@ -94,7 +94,9 @@ function generatePicture(modalImg) {
         baliseDiv.className = "content-modalImg";
         const baliseI = document.createElement("i");
         baliseI.className = "fa-solid fa-trash-can"
+        baliseI.id = [i]
         const baliseImg = document.createElement("img");
+        baliseImg.id = [i];
         baliseImg.src = modalImg[i].imageUrl;
         baliseImg.alt = modalImg[i].title;
             let sectionCard = document.getElementById("contentmodal");
@@ -106,3 +108,49 @@ function generatePicture(modalImg) {
 };
 //--> Appel de la methode pour le 1er affichage
 generatePicture(modalImg);
+
+//---------- Suppression de travaux dans la modale --------------------------------------------------
+
+//--> On récupére l'Id de l'objet à supprimer
+
+let id = null
+
+const idElementToDelete = function (element) {
+    id = document.querySelector(element.target.getAttribute('id'))
+}
+
+const buttonTrash = document.querySelectorAll('.fa-trash-can')
+//console.log(buttonTrash)
+buttonTrash.forEach( element => {
+    element.addEventListener('click', (event) => {
+        event.preventDefault();
+        const idImage = parseInt(event.target.id);
+        console.log(idImage);
+        console.log('Request to delete image "'+idImage+'"');
+        const token = JSON.parse(window.localStorage.getItem("token")).token
+        fetch(`http://localhost:5678/api/works/${idImage}`, {
+            methode: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            switch(response.ok) {
+                case 200:
+                    const sectionGallery = document.getElementById(idImage)
+                    sectionGallery.remove()
+                    console.log("Item "+idImage+"has been deleted")
+                    break
+                case 401:
+                    console.log("Unauthorized")
+                    break
+                case 500:
+                    console.log("Unexpected Behaviour")
+                    break
+                default:
+                    console.log("Default : Unexpected Behaviour")
+            }
+
+        })
+    })
+})
