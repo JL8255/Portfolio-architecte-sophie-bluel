@@ -1,15 +1,20 @@
 //---------- Gestion de l'affichage de la modale sur clic du lien "modifier" --------------------
 
-//--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
-const focussableSelector= "button, a, input, textarea, i" // défini tout ce qui est focussable
+// Déclaration des variables
+const focussableSelector= "button, a, input, textarea" // défini tout ce qui est focussable
+let modal = null
 let focussables = []
 let focusPrecedent = null
-let modal1 = null
-let modal2 = null
+const modal1 = document.getElementById('modal1')
+const modal2 = document.getElementById('modal2')
+const boutonModifier = document.getElementById('modifier')
+const boutonModeEdition = document.getElementById('modeEdition')
+
+//--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
 
 const focusModal = function (element) {
     element.preventDefault()
-    let index = focussables.findIndex(f => f === modal1.querySelector(':focus')) // retourne l'index de l'élément focus
+    let index = focussables.findIndex(f => f === modal.querySelector(':focus')) // retourne l'index de l'élément focus
     if(element.shiftKey === true) {
         index--
     } else {
@@ -22,66 +27,80 @@ const focusModal = function (element) {
         index = focussables.length - 1
     } 
     focussables[index].focus()
+    console.log("Focus on :",modal.querySelector(':focus'))
 }
 
-//--> Pour éviter que la modale se ferme quand on click dessus
+//--> Pour éviter que la modale se ferme quand on click dans le corps de la modale
 function stopPropagation(element) {
-    element.stopPropagation() //pour éviter la propagation du click de fermeture sur le contenu de la modale
+    element.stopPropagation()   // Evite la propagation du click de fermeture sur le contenu de la modale
 }
+
+//--> Définition des fonctions d'ouverture et fermeture des modales
+
 function openModal1() {
-    modal1 = document.getElementById('modal1')
     modal1.removeAttribute('aria-hidden')
     modal1.style = "display:flex"
-    modal1.addEventListener('click', closeModal1)
-    modal1.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
-    modal1.querySelector('.js-modal1-close').addEventListener('click', closeModal1)
-    modal1.querySelector('#boutonAjouterPhoto').addEventListener('click', openModal2)
+    modal = document.getElementById('modal1')
     focussables = Array.from(modal1.querySelectorAll(focussableSelector))
-    focusPrecedent = document.querySelector('focus') // Récupère l'élément focus avant l'ouverture de la modale
-    focussables[0].focus() // permet de mettre le 1er élément en focus par défaut
+    focussables[0].focus()                              // permet de mettre le 1er élément en focus par défaut
+    console.log('Modal "1" opened successfully')
 }
 
 function closeModal1() {
-    modal1 = document.getElementById('modal1')
     modal1.getAttribute('aria-hidden', 'true')
     modal1.style = "display:none"
-    modal1.removeEventListener('click', closeModal1)
-    modal1.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
-    modal1.querySelector('.js-modal1-close').removeEventListener('click', closeModal1)
+    console.log('Modal "1" closed successfully')
 }
 
 function openModal2() {
     closeModal1()
-    modal2 = document.getElementById('modal2')
     modal2.removeAttribute('aria-hidden')
     modal2.style = "display:flex"
-    modal2.addEventListener('click', closeModal2)
-    modal2.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
-    modal2.querySelector('.js-modal2-close').addEventListener('click', closeModal2)
-    modal2.querySelector('.js-previous-modal').addEventListener('click', openModal1)
-    modal2.querySelector('.js-previous-modal').addEventListener('click', closeModal2)
+    modal = document.getElementById('modal2')
+    console.log(modal)
     focussables = Array.from(modal2.querySelectorAll(focussableSelector))
-    focusPrecedent = document.querySelector('focus') // Récupère l'élément focus avant l'ouverture de la modale
-    focussables[0].focus() // permet de mettre le 1er élément en focus par défaut
+    console.log(focussables)
+    focussables[0].focus()
+    console.log('Modal "2" opened successfully')
 }
 
 function closeModal2() {
-    modal2 = document.getElementById('modal2')
     modal2.getAttribute('aria-hidden', 'true')
     modal2.style = "display:none"
     const image = document.getElementById("image");
     image.src = "#"
     image.style = "display:none"
-    modal2.removeEventListener('click', closeModal2)
-    modal2.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
-    modal2.querySelector('.js-modal2-close').removeEventListener('click', closeModal2)
-    modal2.querySelector('.js-previous-modal').removeEventListener('click', closeModal2)
-    modal2.querySelector('.js-previous-modal').removeEventListener('click', openModal1)
-    
+    console.log('Modal "2" closed successfully')
 }
 
-const clickModal1 = document.getElementById('modifier')
-clickModal1.addEventListener('click', openModal1)
+// Ecouteur d'événement sur les balises cliquables des modales 1 et 2 et le bouton modifier de l'index avec appels de fonctions
+
+boutonModeEdition.addEventListener('click', openModal1)
+boutonModifier.addEventListener('click', openModal1)
+modal1.addEventListener('click', closeModal1)
+modal1.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+modal1.querySelector('.js-modal1-close').addEventListener('click', closeModal1)
+modal1.querySelector('#boutonAjouterPhoto').addEventListener('click', openModal2)
+modal2.addEventListener('click', closeModal2)
+modal2.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+modal2.querySelector('.js-modal2-close').addEventListener('click', closeModal2)
+modal2.querySelector('.js-previous-modal').addEventListener('click', closeModal2)
+modal2.querySelector('.js-previous-modal').addEventListener('click', openModal1)
+
+// Ecouteur d'événement sur la touche clavier préssée
+
+window.addEventListener('keydown', function (event) {
+    if (event.key === "Tab"/* && modal !== null*/) {
+        console.log("TAB pressed")
+        focusModal(event) // Tabulation ou shift+Tab déplace le focus sur l'index suivant ou précèdent
+    }
+    if (event.key === "Escape" || event.key === "Esc") {
+        switch(modal.id) {
+            case "modal1": closeModal1(event); break // Echappe ferme la modale
+            case "modal2": closeModal2(event); break // Echappe ferme la modale
+            default: console.error("modal.id is not modal1 or modal2"); break
+    }
+}})
 
 //---------- Gestion de l'affichage de la galerie des photos dans la modale -------------------------------------
 
@@ -97,7 +116,7 @@ const modalImg = await reponse_w.json();
 function generatePicture(modalImg) {
     document.getElementById("contentmodal").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < modalImg.length; i++) {
-        const baliseDiv = document.createElement("div");
+        const baliseDiv = document.createElement("button");
         baliseDiv.className = "content-modalImg";
         const baliseI = document.createElement("i");
         baliseI.className = "fa-solid fa-trash-can"
