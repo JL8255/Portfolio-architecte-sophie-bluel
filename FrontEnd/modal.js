@@ -136,7 +136,7 @@ buttonTrash.forEach( element => {
         console.log('Request to delete image "'+idImage+'"');
         const token = JSON.parse(window.localStorage.getItem("token")).token
         fetch(`http://localhost:5678/api/works/${idImage}`, {
-            methode: "DELETE",
+            method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,
             },

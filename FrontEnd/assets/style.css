@@ -268,19 +268,22 @@ input[type="radio"]:hover + label  {
 }
 #login a {
 	text-align: center;
+	text-decoration: underline;
 }
 #format {
 	color:red;
 }
-#message {
+#messageEmail, #messagePassword {
 	color: red;
 	margin-bottom: 10px;
-}
-#message a, #message p {
-	display: block;
-	color: red;
 	line-height: 20px;
 }
+
+#messageConnexion {
+	color: green;
+	line-height: 20px;
+}
+
 #contact h2 {
 	margin-bottom: 20px;
 }
@@ -295,7 +298,6 @@ input[type="radio"]:hover + label  {
 }
 
 #contact input, #login input, #contentmodal2 input, #contentmodal2 select {
-	background-color: var(--modal-bg-color);
 	height: 50px;
 	font-size: 1.2em;
 	border: none;

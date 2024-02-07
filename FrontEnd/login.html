@@ -30,17 +30,19 @@
             <form id="login_form" action="" method="post">
                 <label for="email">E-mail</label>
                 <input id="email" type="email" name="email" required> <!-- required demande de renseigner le champs obligatoirement avant le submit-->
-                    <p id="formatEmail" style="color:red"><!-- code injected by js --></p>
+                    <p id="messageEmail" style="color:red">
+                        <!-- code injected by js -->
+                    </p>
                 <label for="password">Mot de passe</label>
                 <input id="password" type="password" name="password" required> <!-- required demande de renseigner le champs obligatoirement avant le submit-->
+                    <p id="messagePassword" style="color:red">
+                        <!-- code injected by js -->
+                    </p>
                 <input id="envoyer" type="submit" value="Envoyer">
             </form>
-            <div id="message">
+            <div id="messageConnexion">
                 <!-- code injected by js -->
             </div>            
-            <div>
-                <a href="#">Mot de passe oublié ?</a>
-            </div>
         </section>
     </main>
     <footer id="login_footer">
