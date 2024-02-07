@@ -5,6 +5,7 @@
 
 :root {
 	--body-bg-color: #FFFEF8;
+	--modal-bg-color: #FFF;
 }
 
 html, body, div, span, applet, object, iframe,
@@ -26,6 +27,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	box-sizing: border-box;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -70,6 +72,7 @@ body {
 	font-size: 14px;
 }
 header {
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -90,12 +93,15 @@ header nav {
 #modeEdition {
 	background-color: black;
 	color: white;
-	width: 100%;
+	width: min(100%, 1440px);
 	height: 50px;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+		position: fixed;
+		top: 0px;
+		z-index: 3;
 }
 section {
 	margin: 50px 0;
@@ -120,11 +126,16 @@ h1 > span {
 	letter-spacing: 0.1em;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
 	color: #1D6154;
+}
+h3 {
+	font-family: 'Syne';
+	font-weight: 400;
+	font-size: 22px;
 }
 nav ul {
 	display: flex;
@@ -175,7 +186,7 @@ li:hover {
 	flex-direction: row;
 	flex-wrap: nowrap;
 	align-items: center;
-	height: 100px;
+	height: 140px;
 	text-align: center;
 		background-color: var(--body-bg-color);
 		position: sticky;
@@ -199,9 +210,7 @@ li:hover {
 	align-items: center;
 	margin-bottom: 3em;
 		position:sticky;
-		top: 100px;
-		z-index:1;
-
+		top: 85px;
 }
 .filtre ul {
 	display: flex;
@@ -278,20 +287,21 @@ input[type="radio"]:hover + label  {
 #login h2 {
 	margin: 120px 0px 20px 0px;
 }
-#contact form, #login form {
+#contact form, #login form, #contentmodal2 form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input, #login input {
+#contact input, #login input, #contentmodal2 input, #contentmodal2 select {
+	background-color: var(--modal-bg-color);
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label, #login label {
+#contact label, #login label, #contentmodal2 label {
 	margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -325,4 +335,210 @@ footer nav ul {
 	height: 60px;
 	display: flex;
 	justify-content: flex-end;
+}
+/*--------------------------Modale-------------------------------*/
+
+.modal {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	animation: fadeIn .3s both; /*permet de lancer l'animation définie "fadeIn" avec "both" de opacity 0 à 1 */
+}
+
+.modal h3 {
+	font-family: "work sans";
+}
+
+.modal-wrapper {
+	font-family: "syne";
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: auto; /*barre de défilement en cas de débordement*/
+	width: 525px;
+	padding: 15px 15px 30px 20px;
+	/*max-width: calc(100vw - 20px);*/
+	/*max-height: calc(100vh - 20px);*/
+	background-color: var(--modal-bg-color);
+	border-radius: 10px 10px 10px 10px;
+	/*animation: slideFromTop .3s both .1s;*/
+	animation: scaleGreat .3s both .1s;
+}
+.content-modal-close {
+	width: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	align-items: center;
+}
+.js-modal1-close, .js-modal2-close, .js-previous-modal {
+	border: none;
+	background-color: var(--modal-bg-color);
+	font-size: 16px;
+}
+#contentmodal, #contentmodal2 {
+	width: 80%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 45px 0px 25px 0px;
+	border-bottom: 1px solid rgb(199, 199, 199);
+}
+
+#contentmodal2 {
+	padding: 0px 0px 50px 0px;
+}
+
+#contentmodal2 form {
+	width: 100%;
+	margin: 0;
+}
+
+.content-modalImg {
+	display:flex;
+	box-sizing: border-box;
+	width: 70px;
+	height: 100px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 4px 25px 4px;
+	position: relative;
+}
+.content-modalImg i {
+	background: none;
+	width: 15px;
+	height: 15px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	background-color: black;
+	color: var(--modal-bg-color);
+	border-radius: 2px 2px 2px 2px;
+	font-size: 8px;
+	padding: 2px 2px 2px 2px;
+	margin: 1px 4px 0px 0px;
+	position: absolute;
+	right: 1px;
+	top:3px;
+	z-index: 2;
+}
+.content-modalImg img {
+	width: 100%;
+	height: 100px;
+	object-fit: cover;
+	position: absolute;
+	z-index: 1;
+}
+.content-modalButton {
+	width: 70%;
+	display: flex;
+	justify-content: center;
+	padding-top: 30px;
+}
+#boutonAjouterPhoto, #modal2Button {
+	background-color: #1D6154;
+	border: none;
+	margin: 0px 8px 0px 8px;
+	border-radius: 20px 20px 20px 20px;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 12px;
+	color: var(--modal-bg-color);
+	padding: 6px 35px 6px 35px;
+}
+
+#labelFileImage {
+	display:flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+	height: 175px;
+	padding: 15px 0px 15px 0px;
+	background-color: #E8F1F6;
+	border-radius: 5px 5px 5px 5px;
+}
+
+#contentLabelFileImage {
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+#labelFileImage i {
+	margin: 0;
+	color: rgb(199, 199, 199);
+	font-size: 75px;
+}
+
+#labelFileImage p {
+	color: gray;
+	font-size: 10px;
+}
+
+#ajouterPhoto  {
+	background-color: rgb(199, 199, 199);
+	margin: 0px 8px 0px 8px;
+	border: none;
+	border-radius: 20px 20px 20px 20px;
+	font-family: 'Work sans';
+	font-weight: 500;
+	font-size: 15px;
+	color: rgb(43, 91, 105);
+	padding: 8px 30px 8px 30px;
+}
+
+/**:focus {
+	box-shadow: 0 0 10px blue;
+}*/
+
+	/*lors de la fermeture de la modale*/
+
+.modal[aria-hidden="true"] {
+	animation-name: fadeOut;
+}
+
+.modal[aria-hidden="true"] .modal-wrapper {
+	/*animation-name: slideToBottom;*/
+	animation-name: scaleLittle;
+}
+
+	/*Définition des animations*/
+
+@keyframes fadeIn {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+@keyframes fadeOut {
+	from {opacity: 1;}
+	to {opacity: 0;}
+}
+
+@keyframes slideFromTop {
+	from {transform: translateY(-50px);}
+	to {transform: translateY(0px);}
+}
+
+@keyframes slideToBottom {
+	from {transform: translateY(0px);}
+	to {transform: translateY(50px);}
+}
+
+@keyframes scaleGreat {
+	from {scale: 0;}
+	to {scale: 1;}
+}
+
+@keyframes scaleLittle {
+	from {scale: 1;}
+	to {scale: 0;}
 }
