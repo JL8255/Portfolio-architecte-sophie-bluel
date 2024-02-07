@@ -111,7 +111,7 @@ function generatePicture(modalImg) {
             baliseDiv.appendChild(baliseImg);
             baliseDiv.appendChild(baliseI);
     }
-    console.log("the modal gallery has been (re)generated")
+    console.log("Regenerated modal pictures gallery")
 };
 //--> Appel de la methode pour le 1er affichage
 generatePicture(modalImg);
@@ -146,7 +146,7 @@ buttonTrash.forEach( element => {
                 case 200:
                     const sectionGallery = document.getElementById(idImage)
                     sectionGallery.remove()
-                    console.log("Item "+idImage+"has been deleted")
+                    console.log("Deleted Item "+idImage)
                     break
                 case 401:
                     console.log("Unauthorized")
