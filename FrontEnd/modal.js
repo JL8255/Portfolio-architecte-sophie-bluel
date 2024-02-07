@@ -1,54 +1,15 @@
 //---------- Gestion de l'affichage de la modale sur clic du lien "modifier" --------------------
 
-let modal = null
-const focussableSelector= "button, a, input, textarea" // défini tout ce qui est focussable
+//--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
+const focussableSelector= "button, a, input, textarea, i" // défini tout ce qui est focussable
 let focussables = []
 let focusPrecedent = null
+let modal1 = null
+let modal2 = null
 
-//--> fonction qui "ouvre" la modale
-const openModal = function (element) {
-    element.preventDefault()
-    modal = document.querySelector(element.target.getAttribute('href'))
-    focussables = Array.from(modal.querySelectorAll(focussableSelector))
-    focusPrecedent = document.querySelector('focus') // Récupère l'élément focus avant l'ouverture de la modale
-    focussables[0].focus() // permet de mettre le 1er élément en focus par défaut
-    modal.style.display = null
-    modal.removeAttribute('aria-hidden')
-    modal.setAttribute('aria-modal', 'true')
-    modal.addEventListener('click', closeModal)
-    modal.querySelector('.js-modal-close').addEventListener('click', closeModal)
-    modal.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
-}
-
-//--> fonction qui ferme la modale
-const closeModal = function (element) {
-    if (modal === null) return
-    if (focusPrecedent !== null) focusPrecedent.focus() // Redonne le focus au dernier focus avant ouverture de la modale (par défaut le nav perd le focus)
-    element.preventDefault()
-    window.setTimeout(function() {
-        modal.style.display = "none";
-        modal = null;
-    }, 500) //permet de retarder la fermeture pour avoir une animation
-    modal.setAttribute('aria-hidden', 'true')
-    modal.removeAttribute('aria-modal')
-    modal.removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
-    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
-}
-
-//--> Pour éviter que la modale se ferme quand on click dessus
-const stopPropagation = function(element) {
-    element.stopPropagation() //pour éviter la propagation du click de fermeture sur le contenu de la modale
-}
-
-document.querySelectorAll('.js-modal').forEach(a => {
-    a.addEventListener('click', openModal)
-})
-
-//--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
 const focusModal = function (element) {
     element.preventDefault()
-    let index = focussables.findIndex(f => f === modal.querySelector(':focus')) // retourne l'index de l'élément focus
+    let index = focussables.findIndex(f => f === modal1.querySelector(':focus')) // retourne l'index de l'élément focus
     if(element.shiftKey === true) {
         index--
     } else {
@@ -61,20 +22,66 @@ const focusModal = function (element) {
         index = focussables.length - 1
     } 
     focussables[index].focus()
-
 }
 
-//--> Ecouteur d'événement sur la touche clavier préssée
-window.addEventListener('keydown', function (element) {
-    if (element.key === "Escape" || element.key === "Esc") {
-        closeModal(element) // Echappe ferme la modale
-    }
-    if (element.key === "Tab" && modal !== null) {
-        focusModal(element) // Tabulation ou shift+Tab déplace le focus sur l'index suivant ou précèdent
-    }
-})
+//--> Pour éviter que la modale se ferme quand on click dessus
+function stopPropagation(element) {
+    element.stopPropagation() //pour éviter la propagation du click de fermeture sur le contenu de la modale
+}
+function openModal1() {
+    modal1 = document.getElementById('modal1')
+    modal1.removeAttribute('aria-hidden')
+    modal1.style = "display:flex"
+    modal1.addEventListener('click', closeModal1)
+    modal1.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+    modal1.querySelector('.js-modal1-close').addEventListener('click', closeModal1)
+    modal1.querySelector('#boutonAjouterPhoto').addEventListener('click', openModal2)
+    focussables = Array.from(modal1.querySelectorAll(focussableSelector))
+    focusPrecedent = document.querySelector('focus') // Récupère l'élément focus avant l'ouverture de la modale
+    focussables[0].focus() // permet de mettre le 1er élément en focus par défaut
+}
 
+function closeModal1() {
+    modal1 = document.getElementById('modal1')
+    modal1.getAttribute('aria-hidden', 'true')
+    modal1.style = "display:none"
+    modal1.removeEventListener('click', closeModal1)
+    modal1.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
+    modal1.querySelector('.js-modal1-close').removeEventListener('click', closeModal1)
+}
 
+function openModal2() {
+    closeModal1()
+    modal2 = document.getElementById('modal2')
+    modal2.removeAttribute('aria-hidden')
+    modal2.style = "display:flex"
+    modal2.addEventListener('click', closeModal2)
+    modal2.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+    modal2.querySelector('.js-modal2-close').addEventListener('click', closeModal2)
+    modal2.querySelector('.js-previous-modal').addEventListener('click', openModal1)
+    modal2.querySelector('.js-previous-modal').addEventListener('click', closeModal2)
+    focussables = Array.from(modal2.querySelectorAll(focussableSelector))
+    focusPrecedent = document.querySelector('focus') // Récupère l'élément focus avant l'ouverture de la modale
+    focussables[0].focus() // permet de mettre le 1er élément en focus par défaut
+}
+
+function closeModal2() {
+    modal2 = document.getElementById('modal2')
+    modal2.getAttribute('aria-hidden', 'true')
+    modal2.style = "display:none"
+    const image = document.getElementById("image");
+    image.src = "#"
+    image.style = "display:none"
+    modal2.removeEventListener('click', closeModal2)
+    modal2.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
+    modal2.querySelector('.js-modal2-close').removeEventListener('click', closeModal2)
+    modal2.querySelector('.js-previous-modal').removeEventListener('click', closeModal2)
+    modal2.querySelector('.js-previous-modal').removeEventListener('click', openModal1)
+    
+}
+
+const clickModal1 = document.getElementById('modifier')
+clickModal1.addEventListener('click', openModal1)
 
 //---------- Gestion de l'affichage de la galerie des photos dans la modale -------------------------------------
 
@@ -153,4 +160,42 @@ buttonTrash.forEach( element => {
 
         })
     })
+})
+
+//---------- Ajout d'une photo dans la modale --------------------------------------------------
+
+//--> Création de la liste des catégories dans l'input select
+const reponse_c = await fetch("http://localhost:5678/api/categories");
+const categories = await reponse_c.json();
+
+for (let i=0; i < categories.length; i++) {
+    const baliseOption = document.createElement("option");
+        baliseOption.value = categories[i].name
+        baliseOption.innerText = categories[i].name
+
+    let InputCat = document.getElementById("categorie");
+    InputCat.appendChild(baliseOption);
+}
+
+//--> Définition de la fonction permettant la prévisualisation de la miniature si l'extention est bonne
+function previewPicture(file) {
+    const image = document.getElementById("image");
+    const [picture] = file.files
+
+    /*var ext = getExtension(picture).toLowerCase();
+    if(ext == "png" || ext == "jpg") {
+        console.log("format image ok")
+    } else {console.log("format image incorrect")}
+
+    image.src = URL.createObjectURL(picture)
+    image.alt = "nouvelle image"
+    image.removeAttribute('style')*/
+}
+
+//--> Prévisualisation de la miniature avec l'événement "change"
+const fileImg = document.getElementById('fileImg')
+fileImg.addEventListener('change', () => {
+previewPicture(fileImg)
+const sectionContent = document.getElementById('contentLabelFileImage')
+sectionContent.style = "display:none"
 })
