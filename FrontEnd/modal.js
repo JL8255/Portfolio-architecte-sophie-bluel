@@ -1,7 +1,7 @@
 //---------- Gestion de l'affichage de la modale sur clic du lien "modifier" --------------------
 
 // Déclaration des variables
-const focussableSelector= "button, a, input, textarea" // défini tout ce qui est focussable
+const focussableSelector= "button, a, input, textarea, select" // défini tout ce qui est focussable
 let modal = null
 let focussables = []
 let focusPrecedent = null
@@ -9,6 +9,11 @@ const modal1 = document.getElementById('modal1')
 const modal2 = document.getElementById('modal2')
 const boutonModifier = document.getElementById('modifier')
 const boutonModeEdition = document.getElementById('modeEdition')
+const messageFormat = document.getElementById('messageFormat')
+const messageSize = document.getElementById('messageSize')
+const boutonValiderImage = document.getElementById('formModal2')
+const inputTitre = document.getElementById('titre')
+const inputCategorie = document.getElementById('categorie')
 
 //--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
 
@@ -53,18 +58,24 @@ function closeModal1() {
 }
 
 function openModal2() {
+    inputTitre.value=''
+    inputCategorie.value=''
+    messageFormat.innerText =''
+    messageSize.innerText =''
     closeModal1()
     modal2.removeAttribute('aria-hidden')
     modal2.style = "display:flex"
     modal = document.getElementById('modal2')
-    console.log(modal)
     focussables = Array.from(modal2.querySelectorAll(focussableSelector))
-    console.log(focussables)
     focussables[0].focus()
     console.log('Modal "2" opened successfully')
 }
 
 function closeModal2() {
+    inputTitre.value=''
+    inputCategorie.value=''
+    messageFormat.innerText =''
+    messageSize.innerText =''
     modal2.getAttribute('aria-hidden', 'true')
     modal2.style = "display:none"
     const image = document.getElementById("image");
@@ -95,6 +106,7 @@ window.addEventListener('keydown', function (event) {
         focusModal(event) // Tabulation ou shift+Tab déplace le focus sur l'index suivant ou précèdent
     }
     if (event.key === "Escape" || event.key === "Esc") {
+        console.log("Escape pressed")
         switch(modal.id) {
             case "modal1": closeModal1(event); break // Echappe ferme la modale
             case "modal2": closeModal2(event); break // Echappe ferme la modale
@@ -111,10 +123,10 @@ const modalImg = await reponse_w.json();
 
 //--> Fonction pour (Re)générer la galerie des photos
 
-//Création du contenu HTML dans contentmodal
+//Création du contenu HTML dans contentmodal-js
 //--> Codage de la methode
 function generatePicture(modalImg) {
-    document.getElementById("contentmodal").innerHTML = '' //vide le contenu gallery
+    document.getElementById("contentmodal-js").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < modalImg.length; i++) {
         const baliseDiv = document.createElement("button");
         baliseDiv.className = "content-modalImg";
@@ -125,7 +137,7 @@ function generatePicture(modalImg) {
         baliseImg.id = [i];
         baliseImg.src = modalImg[i].imageUrl;
         baliseImg.alt = modalImg[i].title;
-            let sectionCard = document.getElementById("contentmodal");
+            let sectionCard = document.getElementById("contentmodal-js");
             sectionCard.appendChild(baliseDiv);
             baliseDiv.appendChild(baliseImg);
             baliseDiv.appendChild(baliseI);
@@ -200,21 +212,48 @@ for (let i=0; i < categories.length; i++) {
 function previewPicture(file) {
     const image = document.getElementById("image");
     const [picture] = file.files
-
-    /*var ext = getExtension(picture).toLowerCase();
-    if(ext == "png" || ext == "jpg") {
-        console.log("format image ok")
-    } else {console.log("format image incorrect")}
-
     image.src = URL.createObjectURL(picture)
     image.alt = "nouvelle image"
-    image.removeAttribute('style')*/
+    image.removeAttribute('style')
 }
 
 //--> Prévisualisation de la miniature avec l'événement "change"
-const fileImg = document.getElementById('fileImg')
 fileImg.addEventListener('change', () => {
-previewPicture(fileImg)
-const sectionContent = document.getElementById('contentLabelFileImage')
-sectionContent.style = "display:none"
+    const fileImg = document.getElementById('fileImg')
+    messageFormat.innerText =''
+    messageSize.innerText =''
+    const [picture] = fileImg.files
+    const pictureType = picture.type
+    const pictureSize = picture.size
+    console.log('File upload request. Check of ... ',
+        'Size =',Math.trunc(100*pictureSize/1048576)/100,'mo, ',
+        'Format =',pictureType,'-->')
+    // Vérification du format png ou (jpg/jpeg)
+    if(pictureType !== "image/png" && pictureType !== "image/jpg" && pictureType !== "image/jpeg") {
+        console.error('Incorrect picture format ! File not loaded. Please choose "png" or "jpg".')
+        fileImg.value =''
+        messageFormat.innerText ='Le format du fichier n\'est pas valide, veuillez choisir un fichier de type .jpg ou .png'
+    };
+    if(pictureSize > 4194304) { // ! size s'exprime en octets donc : 4 mo = 4 096 ko = 4 194 304 o
+        console.error('File size too large ! File not loaded. Choose a file smaller than ',4,'mo.')
+        fileImg.value =''    // Vide le contenu de l'input
+        messageSize.innerText ='La taille du fichier est trop importante, veuillez choisir un fichier de taille inférieure à 4mo.'
+    };
+    if(pictureType === "image/png" || pictureType === "image/jpg" || pictureType === "image/jpeg" && pictureSize <= 4194304) {
+            console.log('Picture size and format checked.')
+            previewPicture(fileImg)
+            // Masque les éléments dans la fenêtre label pour que seule la miniature s'affiche
+            const sectionContent = document.getElementById('contentLabelFileImage')
+            sectionContent.style = "display:none"
+    }
+})
+
+//--> Définition de la function d'envoie de la nouvelle image au serveur pour stockage permanent
+
+
+// Ecouteur d'événement sur le bouton "valider" pour envoyer la photo
+boutonValiderImage.addEventListener("submit", async (event) => {
+    // On empêche le comportement par défaut
+    event.preventDefault();
+    console.log("Envoyer")
 })

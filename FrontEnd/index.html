@@ -51,49 +51,57 @@
 <!-- MODAL 1 galerie photo -------------------------------------------------->
 		<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal1" style="display:none">
 			<div class="modal-wrapper js-modal-stop">
-				<div class="content-modal-close">
+				<div class="content-modal1-close">
 					<button class="js-modal1-close"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<h3 id="titlemodal1">Galerie photo</h3>
 				<div id="contentmodal">
+					<div id="contentmodal-js">
 					<!-- code injected by js -->
+					</div>
+					<div class="content-modalButton">
+						<a id="boutonAjouterPhoto" class="js-modal" href="#modal2">Ajouter une photo</a>
+					</div>
 				</div>
-
-				<div class="content-modalButton">
-					<a id="boutonAjouterPhoto" class="js-modal" href="#modal2">Ajouter une photo</a>
-				</div>
+				
 			</div>
 		</aside>
 <!-- MODAL 2 ajouter photo -------------------------------------------------->		
 		<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal2" style="display:none">
 			<div class="modal-wrapper js-modal-stop">
-				<div class="content-modal-close">
-					<button class="js-modal2-close"><i class="fa-solid fa-xmark"></i></button>
+				<div class="content-modal2-close">
 					<button class="js-previous-modal"><i class="fa-solid fa-arrow-left"></i></button>
+					<button class="js-modal2-close"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<h3 id="titlemodal2">Ajout photo</h3>
 				<div id="contentmodal2">
-					<form action="#" method="post">
+					<form id="formModal2" action="#" method="post">
 						<label id="labelFileImage" for="fileImg">
-							<div id="contentLabelFileImage" style="display:flex">
+							<div href="#" id="contentLabelFileImage" style="display:flex">
 								<i class="fa-regular fa-image"></i>
 								<div id="ajouterPhoto">+ Ajouter photo</div>
 								<p>jpg, png : 4mo max</p>
 							</div>
 							<img id="image" src="#" alt="" height="175px" style="display:none">
 						</label>
-						<input type="file" id="fileImg" name="fileImg" accept=".jpg, .png" style="display:none">
+							<p id="messageFormat">
+								<!-- code injected by js -->
+							</p>
+							<p id="messageSize">
+								<!-- code injected by js -->
+							</p>
+						<input type="file" id="fileImg" name="fileImg" accept=".jpg, .png">
 						<label for="titre">Titre</label>
-						<input type="text" name="titre" id="titre" required>
+						<input id="titre" type="text" name="titre" required>
 						<label for="categorie">Catégorie</label>
 						<select id="categorie" name="categorie" required>
 							<option value=""></option>
 							<!-- liste injected by js-->
 						</select>
+						<div class="content-modalButton">
+							<button id="modal2Button" type="submit" style="background-color: gray">Valider</button>
+						</div>
 					</form>
-				</div>
-				<div class="content-modalButton">
-					<button id="modal2Button" type="submit" style="background-color: gray">Valider</button>
 				</div>
 			</div>
 		</aside>
