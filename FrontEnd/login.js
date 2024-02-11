@@ -25,8 +25,7 @@ baliseEmail.addEventListener('change', (event) => {
         }
 });
 
-//--> Format Mdp
-
+//--> Format Mdp, Rien à faire ici. Un Regexp sera défini lors de la création de celui-ci.
 
 //---------- Récupération des info saisies dans le forulaire id et mdp lors du click sur envoyer ----------
 
@@ -87,7 +86,7 @@ async function Login(chargeUtile) {
     }
 }
 
-//--> On met un déclancheur sur le bouton "envoyer"
+//--> On met un déclancheur sur le bouton "envoyer" pour soumettre la requête au serveur
 const boutonFormulaire = document.getElementById('login_form');
 boutonFormulaire.addEventListener("submit", async (event) => {
     // On empêche le comportement par défaut

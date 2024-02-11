@@ -8,8 +8,8 @@ const works = await reponse_w.json();
 
 //--> Fonction pour (Re)générer la gallery des works
 
-//Création du contenu HTML
-//--> Codage de la methode
+// Définition de la fonction permettant de générer la galerie des travaux
+
 function generateGallery(works) {
     document.querySelector(".gallery").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < works.length; i++) {
@@ -29,6 +29,7 @@ function generateGallery(works) {
 //--> Appel de la methode pour le 1er affichage
 generateGallery(works);
 
+
 //---------- Gestion de l'affichage des boutons de filtre et fonctionnement ---------------------------------------
 
 //--> Récupération des catégories depuis le Backend
@@ -45,11 +46,10 @@ const categories = await reponse_c.json();
 
 //--> Création des boutons filtre selon les catégories récupérées
 
-//Création du contenu HTML
 //--> insertion de "Tous" dans la liste des catégories
 categories.unshift({ id: 0, name: "Tous" });
 
-//--> Codage de la methode pour les boutons type radio des catégories récupérées
+//Définition de la fonction permettant la création des boutons type radio des catégories récupérées
 function generateFiltre(categories) {
     //Création balise ul
     const baliseUl = document.createElement("ul");
@@ -76,14 +76,15 @@ function generateFiltre(categories) {
     }
 console.log("Regenerated category buttons")
 };
-//--> Appel de la methode pour le 1er affichage
+//--> Appel de la methode pour l'affichage des boutons
 generateFiltre(categories);
+
+//---------- Filtrage des travaux par catégorie sur pression d'un bouton
 
 // sélection du bouton "Tous" par défaut
 const baliseInputTous = document.getElementById("Tous").checked = true;
 
-//--> Création de la fonction de filtrage selon le bouton cliqué
-
+// Ecouteur d'événement sur les boutons radio et appel de la methode pour filtrer
 const boutonFiltrer = document.querySelector("#Ul-filtre");
 boutonFiltrer.addEventListener("change", function () {
     let boutonRadio = document.querySelectorAll('input[name="lienfiltre"]')

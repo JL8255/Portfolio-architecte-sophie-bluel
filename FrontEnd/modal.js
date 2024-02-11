@@ -11,9 +11,10 @@ const boutonModifier = document.getElementById('modifier')
 const boutonModeEdition = document.getElementById('modeEdition')
 const messageFormat = document.getElementById('messageFormat')
 const messageSize = document.getElementById('messageSize')
-const boutonValiderImage = document.getElementById('formModal2')
+const inputURL = document.getElementById('fileImg')
 const inputTitre = document.getElementById('titre')
 const inputCategorie = document.getElementById('categorie')
+const formNewPic = document.getElementById('formModal2')
 
 //--> fonction qui permet de déplacer le focus dans la modale en appuyant sur Tab ou Shift+Tab
 
@@ -58,11 +59,11 @@ function closeModal1() {
 }
 
 function openModal2() {
-    inputTitre.value=''
-    inputCategorie.value=''
-    messageFormat.innerText =''
-    messageSize.innerText =''
     closeModal1()
+    formNewPic.reset()
+    loadCategorieButton()
+    changeColor()
+    messageSize.innerText =''
     modal2.removeAttribute('aria-hidden')
     modal2.style = "display:flex"
     modal = document.getElementById('modal2')
@@ -72,8 +73,7 @@ function openModal2() {
 }
 
 function closeModal2() {
-    inputTitre.value=''
-    inputCategorie.value=''
+    formNewPic.reset()
     messageFormat.innerText =''
     messageSize.innerText =''
     modal2.getAttribute('aria-hidden', 'true')
@@ -85,7 +85,6 @@ function closeModal2() {
 }
 
 // Ecouteur d'événement sur les balises cliquables des modales 1 et 2 et le bouton modifier de l'index avec appels de fonctions
-
 boutonModeEdition.addEventListener('click', openModal1)
 boutonModifier.addEventListener('click', openModal1)
 modal1.addEventListener('click', closeModal1)
@@ -114,6 +113,21 @@ window.addEventListener('keydown', function (event) {
     }
 }})
 
+// Contrôle des "input" Affiche les "input" en tappant sur le clavier ²
+window.addEventListener('keydown', function (event) {
+    if (event.key === "²") {
+        class valeursInput {
+            constructor(URL, Titre, Catégorie) {
+                this.URL = inputURL.files
+                this.Titre = inputTitre.value
+                this.Catégorie = inputCategorie.value
+            }
+        }
+        const input = new valeursInput(inputURL.files,inputTitre.value,inputCategorie.valeur) 
+        console.table(input)
+        console.log((inputTitre.value).length !== 0 && (inputCategorie.value).length !== 0)
+    }
+})
 //---------- Gestion de l'affichage de la galerie des photos dans la modale -------------------------------------
 
 //--> Récupération des travaux depuis le Backend
@@ -121,10 +135,7 @@ window.addEventListener('keydown', function (event) {
 const reponse_w = await fetch("http://localhost:5678/api/works");
 const modalImg = await reponse_w.json();
 
-//--> Fonction pour (Re)générer la galerie des photos
-
-//Création du contenu HTML dans contentmodal-js
-//--> Codage de la methode
+// Définition de la fonction permettant de générer la galerie des photos dans contentmodal-js
 function generatePicture(modalImg) {
     document.getElementById("contentmodal-js").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < modalImg.length; i++) {
@@ -144,6 +155,7 @@ function generatePicture(modalImg) {
     }
     console.log("Regenerated modal pictures gallery")
 };
+
 //--> Appel de la methode pour le 1er affichage
 generatePicture(modalImg);
 
@@ -196,9 +208,9 @@ buttonTrash.forEach( element => {
 //---------- Ajout d'une photo dans la modale --------------------------------------------------
 
 //--> Création de la liste des catégories dans l'input select
+async function loadCategorieButton() {
 const reponse_c = await fetch("http://localhost:5678/api/categories");
 const categories = await reponse_c.json();
-
 for (let i=0; i < categories.length; i++) {
     const baliseOption = document.createElement("option");
         baliseOption.value = categories[i].name
@@ -207,8 +219,10 @@ for (let i=0; i < categories.length; i++) {
     let InputCat = document.getElementById("categorie");
     InputCat.appendChild(baliseOption);
 }
+console.log("Loaded categories : ",categories)
+}
 
-//--> Définition de la fonction permettant la prévisualisation de la miniature si l'extention est bonne
+//--> Définition de la fonction permettant la prévisualisation de la miniature si l'extention et la taille sont bonnes
 function previewPicture(file) {
     const image = document.getElementById("image");
     const [picture] = file.files
@@ -248,12 +262,63 @@ fileImg.addEventListener('change', () => {
     }
 })
 
+//--> Change la couleur du bouton "Valider" avec l'événement "change"
+function changeColor() {
+    const boutonValider = document.getElementById('modal2Button')
+    formNewPic.addEventListener('change', () => {
+    if ((inputURL.files).length !== 0 && inputTitre.value !== "" && inputCategorie.value !== "") {
+        boutonValider.style = "background-color: #1D6154" // #1D6154
+    }
+})}
+
 //--> Définition de la function d'envoie de la nouvelle image au serveur pour stockage permanent
 
+async function createImg(chargeUtile) {
+    const token = JSON.parse(window.localStorage.getItem("token")).token
+    const reponse_I = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(chargeUtile),
+
+    });
+    //const loadResponse = await reponse_I.json();
+
+    //Analyse réponse
+    switch(reponse_I.status) {
+        case 201:
+            console.log(201,': Created')
+            break
+        case 400:
+            console.log(400,': Bad Request')
+            break
+        case 401:
+            console.log(401,': Unauthorized')
+            break
+        case 500:
+            console.log(500,': Unexpected Error')
+            break
+        default: break
+    }
+}
 
 // Ecouteur d'événement sur le bouton "valider" pour envoyer la photo
-boutonValiderImage.addEventListener("submit", async (event) => {
+formNewPic.addEventListener("submit", async (event) => {
     // On empêche le comportement par défaut
     event.preventDefault();
-    console.log("Envoyer")
+    // On récupère les champs URL, titre et catégorie pour constituer la charge utile
+    const [picture] = inputURL.files;
+    const imageFile = URL.createObjectURL(picture);
+    const titleValue = inputTitre.value;
+    const categorieValue = inputCategorie.selectedIndex;
+    const chargeUtile = {
+        imageUrl: imageFile,
+        titre: titleValue,
+        categoryId: categorieValue
+    };
+    console.log("Send a new work request sent to the server.")
+    console.log(chargeUtile)
+    createImg(chargeUtile); // Appel de la fonction serveur
 })
