@@ -60,7 +60,7 @@ function closeModal1() {
 
 function openModal2() {
     closeModal1()
-    formNewPic.reset()
+    //formNewPic.reset()
     loadCategorieButton()
     changeColor()
     messageSize.innerText =''
@@ -73,7 +73,7 @@ function openModal2() {
 }
 
 function closeModal2() {
-    formNewPic.reset()
+    //formNewPic.reset()
     messageFormat.innerText =''
     messageSize.innerText =''
     modal2.getAttribute('aria-hidden', 'true')
@@ -221,7 +221,7 @@ for (let i=0; i < categories.length; i++) {
 }
 console.log("Loaded categories : ",categories)
 }
-
+loadCategorieButton()
 //--> Définition de la fonction permettant la prévisualisation de la miniature si l'extention et la taille sont bonnes
 function previewPicture(file) {
     const image = document.getElementById("image");
@@ -278,10 +278,11 @@ async function createImg(chargeUtile) {
     const reponse_I = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
-            'accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            accept: "application/json",
+            //"Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(chargeUtile),
+        body: chargeUtile,
 
     });
     //const loadResponse = await reponse_I.json();
@@ -304,21 +305,41 @@ async function createImg(chargeUtile) {
     }
 }
 
+
+function convertToBinaryUsingCharacterCodes(input) { 
+    let binaryResult = ''; 
+      
+    for (let i = 0; i < input.length; i++) { 
+        const charCode = input.charCodeAt(i); 
+        let binaryValue = ''; 
+          
+        for (let j = 7; j >= 0; j--) { 
+            binaryValue += (charCode >> j) & 1; 
+        } 
+          
+        binaryResult += binaryValue + ' '; 
+    } 
+      
+    return binaryResult.trim(); 
+} 
+const input = "FILE"
+const resp = convertToBinaryUsingCharacterCodes(input)
+console.log(resp)
+
 // Ecouteur d'événement sur le bouton "valider" pour envoyer la photo
-formNewPic.addEventListener("submit", async (event) => {
+formNewPic.addEventListener("submit", (event) => {
     // On empêche le comportement par défaut
     event.preventDefault();
     // On récupère les champs URL, titre et catégorie pour constituer la charge utile
-    const [picture] = inputURL.files;
-    const imageFile = URL.createObjectURL(picture);
-    const titleValue = inputTitre.value;
-    const categorieValue = inputCategorie.selectedIndex;
-    const chargeUtile = {
-        imageUrl: imageFile,
-        titre: titleValue,
-        categoryId: categorieValue
-    };
-    console.log("Send a new work request sent to the server.")
+    //const picture = inputURL.files[0];
+    //const imageFile = URL.createObjectURL(picture);
+    //const pic = convertToBinaryUsingCharacterCodes(imageFile)
+    
+    const chargeUtile = new FormData();
+        chargeUtile.append("image", inputURL.files[0]);
+        chargeUtile.append("title", inputTitre.value);
+        chargeUtile.append("category", inputCategorie.value);
+    console.log('"Send a new work" request sent to the server.')
     console.log(chargeUtile)
     createImg(chargeUtile); // Appel de la fonction serveur
 })

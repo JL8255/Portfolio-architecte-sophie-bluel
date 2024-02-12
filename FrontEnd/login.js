@@ -50,10 +50,10 @@ async function Login(chargeUtile) {
         case 200:
             //--> si identifiant valides : déclarations des variables et stockage dans le localstorage pour conservation de l'id pendant 24H
             const dateConnexion = Date.parse(new Date());
-            console.log(
-            Math.floor((dateConnexion)/3600000)%24+"h "+
-            Math.floor((dateConnexion)/60000)%60+"m "+
-            Math.floor((dateConnexion)/1000)%60+
+            console.log("Connection request at : "+
+            Math.floor((dateConnexion+3600000)/3600000)%24+"h "+
+            Math.floor((dateConnexion+3600000)/60000)%60+"m "+
+            Math.floor((dateConnexion+3600000)/1000)%60+
             "s")
             token = connexion.token;
             const elementConnexion = {"date": dateConnexion, "token": token};
