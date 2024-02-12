@@ -60,7 +60,7 @@ function closeModal1() {
 
 function openModal2() {
     closeModal1()
-    //formNewPic.reset()
+    formNewPic.reset()
     loadCategorieButton()
     changeColor()
     messageSize.innerText =''
@@ -73,7 +73,7 @@ function openModal2() {
 }
 
 function closeModal2() {
-    //formNewPic.reset()
+    formNewPic.reset()
     messageFormat.innerText =''
     messageSize.innerText =''
     modal2.getAttribute('aria-hidden', 'true')
@@ -128,6 +128,7 @@ window.addEventListener('keydown', function (event) {
         console.log((inputTitre.value).length !== 0 && (inputCategorie.value).length !== 0)
     }
 })
+
 //---------- Gestion de l'affichage de la galerie des photos dans la modale -------------------------------------
 
 //--> Récupération des travaux depuis le Backend
@@ -222,6 +223,7 @@ for (let i=0; i < categories.length; i++) {
 console.log("Loaded categories : ",categories)
 }
 loadCategorieButton()
+
 //--> Définition de la fonction permettant la prévisualisation de la miniature si l'extention et la taille sont bonnes
 function previewPicture(file) {
     const image = document.getElementById("image");
@@ -303,42 +305,18 @@ async function createImg(chargeUtile) {
             break
         default: break
     }
+    formNewPic.reset()
 }
-
-
-function convertToBinaryUsingCharacterCodes(input) { 
-    let binaryResult = ''; 
-      
-    for (let i = 0; i < input.length; i++) { 
-        const charCode = input.charCodeAt(i); 
-        let binaryValue = ''; 
-          
-        for (let j = 7; j >= 0; j--) { 
-            binaryValue += (charCode >> j) & 1; 
-        } 
-          
-        binaryResult += binaryValue + ' '; 
-    } 
-      
-    return binaryResult.trim(); 
-} 
-const input = "FILE"
-const resp = convertToBinaryUsingCharacterCodes(input)
-console.log(resp)
 
 // Ecouteur d'événement sur le bouton "valider" pour envoyer la photo
 formNewPic.addEventListener("submit", (event) => {
     // On empêche le comportement par défaut
     event.preventDefault();
     // On récupère les champs URL, titre et catégorie pour constituer la charge utile
-    //const picture = inputURL.files[0];
-    //const imageFile = URL.createObjectURL(picture);
-    //const pic = convertToBinaryUsingCharacterCodes(imageFile)
-    
     const chargeUtile = new FormData();
         chargeUtile.append("image", inputURL.files[0]);
         chargeUtile.append("title", inputTitre.value);
-        chargeUtile.append("category", inputCategorie.value);
+        chargeUtile.append("category", inputCategorie.selectedIndex);
     console.log('"Send a new work" request sent to the server.')
     console.log(chargeUtile)
     createImg(chargeUtile); // Appel de la fonction serveur
