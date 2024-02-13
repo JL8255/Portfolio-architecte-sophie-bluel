@@ -268,19 +268,22 @@ input[type="radio"]:hover + label  {
 }
 #login a {
 	text-align: center;
+	text-decoration: underline;
 }
 #format {
 	color:red;
 }
-#message {
+#messageEmail, #messagePassword {
 	color: red;
 	margin-bottom: 10px;
-}
-#message a, #message p {
-	display: block;
-	color: red;
 	line-height: 20px;
 }
+
+#messageConnexion {
+	color: green;
+	line-height: 20px;
+}
+
 #contact h2 {
 	margin-bottom: 20px;
 }
@@ -295,7 +298,6 @@ input[type="radio"]:hover + label  {
 }
 
 #contact input, #login input, #contentmodal2 input, #contentmodal2 select {
-	background-color: var(--modal-bg-color);
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -370,10 +372,17 @@ footer nav ul {
 	/*animation: slideFromTop .3s both .1s;*/
 	animation: scaleGreat .3s both .1s;
 }
-.content-modal-close {
+.content-modal1-close {
 	width: 100%;
 	display: flex;
-	flex-direction: row-reverse;
+	flex-direction: row;
+	justify-content: end;
+	align-items: center;
+}
+.content-modal2-close {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
 }
@@ -382,22 +391,30 @@ footer nav ul {
 	background-color: var(--modal-bg-color);
 	font-size: 16px;
 }
+
 #contentmodal, #contentmodal2 {
 	width: 80%;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	padding: 45px 0px 25px 0px;
-	border-bottom: 1px solid rgb(199, 199, 199);
+	padding: 0px 0px 0px 0px;
 }
 
-#contentmodal2 {
-	padding: 0px 0px 50px 0px;
+#contentmodal-js {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 0px 0px 0px 0px;
 }
 
 #contentmodal2 form {
 	width: 100%;
 	margin: 0;
+}
+
+#titlemodal1 {
+	margin-bottom: 30px;
 }
 
 .content-modalImg {
@@ -407,6 +424,7 @@ footer nav ul {
 	height: 100px;
 	padding: 0px 0px 0px 0px;
 	margin: 0px 4px 25px 4px;
+	border: none;
 	position: relative;
 }
 .content-modalImg i {
@@ -435,13 +453,15 @@ footer nav ul {
 	z-index: 1;
 }
 .content-modalButton {
-	width: 70%;
+	width: 100%;
 	display: flex;
 	justify-content: center;
+	margin-top: 33px;
 	padding-top: 30px;
+	border-top: 1px solid rgb(199, 199, 199);
 }
+
 #boutonAjouterPhoto, #modal2Button {
-	background-color: #1D6154;
 	border: none;
 	margin: 0px 8px 0px 8px;
 	border-radius: 20px 20px 20px 20px;
@@ -450,6 +470,14 @@ footer nav ul {
 	font-size: 12px;
 	color: var(--modal-bg-color);
 	padding: 6px 35px 6px 35px;
+}
+
+#boutonAjouterPhoto {
+	background-color: #1D6154;
+}
+
+#modal2Button {
+	background-color: gray;
 }
 
 #labelFileImage {
@@ -494,6 +522,21 @@ footer nav ul {
 	font-size: 15px;
 	color: rgb(43, 91, 105);
 	padding: 8px 30px 8px 30px;
+}
+
+#fileImg {
+	width: 100%;
+	max-height: 0px;
+}
+
+#categorie {
+	background-color: var(--modal-bg-color);
+	margin-bottom: 25px;
+}
+
+#messageFormat, #messageSize {
+	color: red;
+	line-height: 20px;
 }
 
 /**:focus {
