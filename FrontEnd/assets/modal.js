@@ -90,6 +90,7 @@ async function closeModal2() {
     const reponse_w = await fetch("http://localhost:5678/api/works");
     const works = await reponse_w.json();
     generateGallery(works)
+    generatePicture(works)
     console.log('Modal "2" closed successfully');
 }
 // Définition de la fonction permettant de générer la galerie des photos dans contentmodal-js.
