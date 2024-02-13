@@ -1,5 +1,6 @@
-//---------- DECLARATION DES VARIABLES A LONGUE PORTEE --------------------------------------------
+//---------- DECLARATION DES VARIABLES A LONGUE PORTEE ET IMPORTATIONS DE FONCTIONS -------------
 
+import {generateGallery} from './index.js'; 
 let modal = null
 let focussables = []
 let focusPrecedent = null
@@ -56,9 +57,12 @@ function openModal1() {
     focussables[0].focus()                              // permet de mettre le 1er élément en focus par défaut
     console.log('Modal "1" opened successfully')
 }
-function closeModal1() {
+async function closeModal1() {
     modal1.getAttribute('aria-hidden', 'true')
     modal1.style = "display:none"
+    const reponse_w = await fetch("http://localhost:5678/api/works");
+    const works = await reponse_w.json();
+    generateGallery(works)
     console.log('Modal "1" closed successfully')
 }
 function openModal2() {
@@ -75,7 +79,7 @@ function openModal2() {
     focussables[0].focus()
     console.log('Modal "2" opened successfully')
 }
-function closeModal2() {
+async function closeModal2() {
     formNewPic.reset()
     messageFormat.innerText =''
     messageSize.innerText =''
@@ -83,6 +87,9 @@ function closeModal2() {
     modal2.style = "display:none"
     const image = document.getElementById("image");
     image.style = "display:none"
+    const reponse_w = await fetch("http://localhost:5678/api/works");
+    const works = await reponse_w.json();
+    generateGallery(works)
     console.log('Modal "2" closed successfully');
 }
 // Définition de la fonction permettant de générer la galerie des photos dans contentmodal-js.

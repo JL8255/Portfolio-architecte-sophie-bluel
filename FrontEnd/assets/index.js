@@ -90,7 +90,7 @@ function loginVerification () {
     };
 };
 // Fonction permettant de générer la galerie des travaux
-async function generateGallery(works) {
+export async function generateGallery(works) {
 
     document.querySelector(".gallery").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < works.length; i++) {
