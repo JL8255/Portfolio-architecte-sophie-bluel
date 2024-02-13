@@ -22,7 +22,7 @@
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li><a href="./login.html" id="logout">login</a></li>
+			<li><a id="logout" href="./login.html">login</a></li>
 				<p id="messagelogout" style="color:red"></p>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
@@ -90,12 +90,11 @@
 							<p id="messageSize">
 								<!-- code injected by js -->
 							</p>
-						<input id="fileImg" type="file" name="fileImg" accept=".jpg, .png">
+						<input id="fileImg" type="file" name="fileImg" accept=".jpg, .png" required>
 						<label for="titre">Titre</label>
 						<input id="titre" type="text" name="titre" required>
 						<label for="categorie">Catégorie</label>
 						<select id="categorie" name="categorie" required>
-							<option value=""></option>
 							<!-- liste injected by js-->
 						</select>
 						<div class="content-modalButton">

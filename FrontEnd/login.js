@@ -30,7 +30,15 @@ baliseEmail.addEventListener('change', (event) => {
 //---------- Récupération des info saisies dans le forulaire id et mdp lors du click sur envoyer ----------
 
 //--> Définition de la fonction requête serveur et analyse de la réponse
-async function Login(chargeUtile) {
+async function Login() {
+    // On récupère les deux champs email et password pour constituer la charge utile
+    const emailValue = baliseEmail.value;
+    const passwordValue = balisePassword.value;
+    const chargeUtile = {
+        email: emailValue,
+        password: passwordValue
+    };
+    console.log("Connection request sent to the server.")
     const reponse_l = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: {
@@ -91,13 +99,5 @@ const boutonFormulaire = document.getElementById('login_form');
 boutonFormulaire.addEventListener("submit", async (event) => {
     // On empêche le comportement par défaut
     event.preventDefault();
-    // On récupère les deux champs email et password pour constituer la charge utile
-    const emailValue = baliseEmail.value;
-    const passwordValue = balisePassword.value;
-    const chargeUtile = {
-        email: emailValue,
-        password: passwordValue
-    };
-    console.log("Connection request sent to the server.")
-    Login(chargeUtile); // Appel de la fonction serveur
+    Login();
 })

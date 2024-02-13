@@ -1,16 +1,97 @@
+//---------- DECLARATION DES VARIABLES A LONGUE PORTEE ----------------------------------------------------------
 
-//---------- Gestion de l'affichage de la gallery ----------------------------------------------------------------
+const baliseLogin = document.getElementById("logout");
+const baliseMessageLogout = document.getElementById("messagelogout");
+const baliseModeEdition = document.getElementById("modeEdition");
+const baliseModifier = document.getElementById("modifier");
 
 //--> Récupération des travaux depuis le Backend
-
 const reponse_w = await fetch("http://localhost:5678/api/works");
 const works = await reponse_w.json();
 
-//--> Fonction pour (Re)générer la gallery des works
+//--> Récupération des catégories depuis le Backend
+const reponse_c = await fetch("http://localhost:5678/api/categories");
+const categories = await reponse_c.json();
+/*      ==> Autre méthode pour récupérer la liste des catégories avec la fonction map et l'objet Set :
+        const mapcategories = works.map(work => work.category);
+        console.log(mapcategories)
+        const monSet = new Set();
+        mapcategories.forEach((element) => monSet.add(element));
+        console.log(monSet)
+*/
 
-// Définition de la fonction permettant de générer la galerie des travaux
+//---------- DEFINITIONS DES METHODES ----------------------------------------------------------------------------
 
-function generateGallery(works) {
+// Fonction de connexion de l'utilisateur
+function pressLogin() {
+    baliseLogin.innerText = "";
+    baliseMessageLogout.innerText = "Connecté";
+    baliseMessageLogout.style = "color: green";
+    baliseLogin.addEventListener("click", pressLogout);
+    setTimeout(() => {
+        baliseMessageLogout.innerText = "";
+        baliseLogin.innerText ="Logout";
+        baliseMessageLogout.style = "color: red";
+        baliseLogin.style = "color:black";
+        baliseLogin.href = "#";
+        baliseModeEdition.style="display:flex";
+        baliseModifier.style="display:inline";
+    }, 1000);
+}
+// Fonction de déconnexion de l'utilisateur
+function pressLogout() {
+    window.localStorage.removeItem("token");
+    baliseLogin.innerText = "";
+    baliseMessageLogout.innerText = "Déconnexion...";
+    baliseLogin.removeEventListener("click", pressLogout);
+    setTimeout(() => {
+        baliseMessageLogout.innerText = "";
+        baliseLogin.innerText ="Login";
+        baliseLogin.style = "color:black";
+        baliseLogin.href = "./login.html";
+        baliseModeEdition.style="display:none";
+        baliseModifier.style="display:none";
+    }, 1000);
+    console.log("Disconnect request. --> Token deleted ! = "+window.localStorage.getItem("token")+
+        " --> Login link reappears in the navigation menu. And edit mode desactivated.")
+}
+// Fonction de vérification Si l'utilisateur est connecté : vérification de la validité du token
+function loginVerification () {
+    if (window.localStorage.getItem("token") !== null) {
+        const token = JSON.parse(window.localStorage.getItem("token")).token;
+        const dateConnected = JSON.parse(window.localStorage.getItem("token")).date;
+        const dateNow = Date.parse(new Date())
+        const tokenTimelaps = dateNow - dateConnected;   // remplacer dateConnected par (dateConnected-86399995000) pour tester expiration au bout de 5s
+        
+        if (tokenTimelaps > 86400000000) {
+            console.log("token expired since : -"+
+                Math.floor((tokenTimelaps)/3600000)%24+"h "+
+                Math.floor((tokenTimelaps)/60000)%60+"m "+
+                Math.floor((tokenTimelaps)/1000)%60+
+                "s --> Token remove of localstorage ! Edit mode hidden.");
+            pressLogout()
+        } else {
+            console.log("A valid token exists since "+
+                Math.floor(tokenTimelaps/3600000)%24+"h "+
+                Math.floor(tokenTimelaps/60000)%60+"m "
+                +Math.floor(tokenTimelaps/1000)%60+
+                "s, expires in "+
+                Math.floor((86400000000-tokenTimelaps)/3600000)%24+"h "
+                +Math.floor((86400000000-tokenTimelaps)/60000)%60+"m "
+                +Math.floor((86400000000-tokenTimelaps)/1000)%60+
+                "s : token = "+token+
+                " --> Logout link appears instead of the login link in the navigation menu. And edit mode displayed.");
+            pressLogin()
+        }
+    } else {
+        baliseModeEdition.style="display:none";
+        baliseModifier.style="display:none";
+        console.log("No token exists ! --> Edit mode hidden.");
+    };
+};
+// Fonction permettant de générer la galerie des travaux
+async function generateGallery(works) {
+
     document.querySelector(".gallery").innerHTML = '' //vide le contenu gallery
     for (let i=0; i < works.length; i++) {
         const baliseFigure = document.createElement("figure");
@@ -26,31 +107,10 @@ function generateGallery(works) {
     }
     console.log("Regenerated gallery")
 };
-//--> Appel de la methode pour le 1er affichage
-generateGallery(works);
-
-
-//---------- Gestion de l'affichage des boutons de filtre et fonctionnement ---------------------------------------
-
-//--> Récupération des catégories depuis le Backend
-
-const reponse_c = await fetch("http://localhost:5678/api/categories");
-const categories = await reponse_c.json();
-
-        /* ==> Autre méthode pour récupérer la liste des catégories avec la fonction map et l'objet Set :
-        const mapcategories = works.map(work => work.category);
-        console.log(mapcategories)
-        const monSet = new Set();
-        mapcategories.forEach((element) => monSet.add(element));
-        console.log(monSet)*/
-
-//--> Création des boutons filtre selon les catégories récupérées
-
-//--> insertion de "Tous" dans la liste des catégories
-categories.unshift({ id: 0, name: "Tous" });
-
-//Définition de la fonction permettant la création des boutons type radio des catégories récupérées
+// Fonction permettant la création des boutons type radio des catégories récupérées
 function generateFiltre(categories) {
+    //--> insertion de "Tous" dans la liste des catégories
+    categories.unshift({ id: 0, name: "Tous" });
     //Création balise ul
     const baliseUl = document.createElement("ul");
     baliseUl.id = "Ul-filtre";
@@ -66,7 +126,6 @@ function generateFiltre(categories) {
                 baliseLabel.setAttribute("for",categories[i].name);
                 const baliseSpan = document.createElement("span");
                     baliseSpan.innerText = categories[i].name;
-
         let sectionFiltre = document.querySelector(".filtre");
         sectionFiltre.appendChild(baliseUl)
         baliseUl.appendChild(baliseLi);
@@ -76,11 +135,14 @@ function generateFiltre(categories) {
     }
 console.log("Regenerated category buttons")
 };
+//----------------------------------------------------------------------------------------------------------------
+
+// Vérification de cennexion de l'utilisateur : S'il n'y a un token, on vérifie sa validdité.
+loginVerification()
+//--> Appel de la methode pour le 1er affichage
+generateGallery(works);
 //--> Appel de la methode pour l'affichage des boutons
 generateFiltre(categories);
-
-//---------- Filtrage des travaux par catégorie sur pression d'un bouton
-
 // sélection du bouton "Tous" par défaut
 const baliseInputTous = document.getElementById("Tous").checked = true;
 
@@ -105,72 +167,4 @@ boutonFiltrer.addEventListener("change", function () {
         generateGallery(worksFiltres)
         };
     document.location.href="#portfolio";
-});
-
-//---------- Vérifiction du status de connexion de l'utilisateur pour la gestion des éléments à afficher --------------------
-
-//--> Récupération des balises à afficher ou pas
-const baliseModeEdition = document.getElementById("modeEdition");
-const baliseModifier = document.getElementById("modifier");
-
-//--> Si l'utilisateur n'est pas connecté
-if (window.localStorage.getItem("token") === null) {
-    baliseModeEdition.style="display:none";
-    baliseModifier.style="display:none";
-    console.log("No token exists ! --> Edit mode hidden.");
-};
-
-//--> Si l'utilisateur est connecté : vérification de la validité du token
-if (window.localStorage.getItem("token") !== null) {
-    const token = JSON.parse(window.localStorage.getItem("token")).token;
-    const dateConnected = JSON.parse(window.localStorage.getItem("token")).date;
-    const dateNow = Date.parse(new Date())
-    const tokenTimelaps = dateNow - dateConnected;
-    
-    if (tokenTimelaps > 86400000000) {
-        window.localStorage.removeItem("token");
-        baliseModeEdition.style="display:none";
-        baliseModifier.style="display:none";
-        console.log("token expired since : -"+
-            Math.floor((tokenTimelaps)/3600000)%24+"h "+
-            Math.floor((tokenTimelaps)/60000)%60+"m "+
-            Math.floor((tokenTimelaps)/1000)%60+
-            "s --> Token remove of localstorage ! Edit mode hidden.");
-    } else {
-        const baliseLogout = document.getElementById("logout");
-        baliseLogout.innerText ="Logout";
-        baliseLogout.href = "#";
-        console.log("A valid token exists since "+
-            Math.floor(tokenTimelaps/3600000)%24+"h "+
-            Math.floor(tokenTimelaps/60000)%60+"m "
-            +Math.floor(tokenTimelaps/1000)%60+
-            "s, expires in "+
-            Math.floor((86400000000-tokenTimelaps)/3600000)%24+"h "
-            +Math.floor((86400000000-tokenTimelaps)/60000)%60+"m "
-            +Math.floor((86400000000-tokenTimelaps)/1000)%60+
-            "s : token = "+token+
-            " --> Logout link appears instead of the login link in the navigation menu. And edit mode displayed.");
-        baliseModeEdition.style="display:flex";
-        baliseModifier.style="display:inline";
-    }
-};
-
-//L'utilisateur décide de se déconnecter : Login s'affiche lorsque l'utilisateur sur logout est le token est effacé
-const baliseLogin = document.getElementById("logout")
-baliseLogin.addEventListener("click", function () {
-    if (window.localStorage.getItem("token") !== null) {
-        window.localStorage.removeItem("token");
-        baliseLogin.innerText = "";
-        document.getElementById("messagelogout").innerText = "Déconnexion";
-        setTimeout(() => {
-            document.getElementById("messagelogout").innerText = "";
-            baliseLogin.style = "color:black";
-            baliseLogin.href = "./login.html";
-            baliseLogin.innerText ="Login";
-            baliseModeEdition.style="display:none";
-            baliseModifier.style="display:none";
-        }, 1000);
-        console.log("Disconnect request. --> Token deleted ! = "+window.localStorage.getItem("token")+
-            " --> Login link reappears in the navigation menu. And edit mode desactivated.")
-    }
 });
