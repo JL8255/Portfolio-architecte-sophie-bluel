@@ -4,14 +4,21 @@ const baliseLogin = document.getElementById("logout");
 const baliseMessageLogout = document.getElementById("messagelogout");
 const baliseModeEdition = document.getElementById("modeEdition");
 const baliseModifier = document.getElementById("modifier");
+const gallery = document.querySelector(".gallery")
 
-//--> Récupération des travaux depuis le Backend
-const reponse_w = await fetch("http://localhost:5678/api/works");
-const works = await reponse_w.json();
+//---------- DEFINITIONS DES METHODES ----------------------------------------------------------------------------
 
-//--> Récupération des catégories depuis le Backend
-const reponse_c = await fetch("http://localhost:5678/api/categories");
-const categories = await reponse_c.json();
+export async function recoveryWorks() {    //   GET REQUEST API : Récupère la liste des travaux sur le serveur
+    const reponseW = await fetch("http://localhost:5678/api/works")
+    const reponseWJson = await reponseW.json()
+    return reponseWJson
+}; const works = await recoveryWorks()
+
+export async function recoveryCategories() {    //   GET REQUEST API : Récupère la liste des catégories à partir de l'API
+    const reponseC = await fetch("http://localhost:5678/api/categories")
+    const reponseCJson = await reponseC.json()
+    return reponseCJson
+}; const categories = await recoveryCategories()
 /*      ==> Autre méthode pour récupérer la liste des catégories avec la fonction map et l'objet Set :
         const mapcategories = works.map(work => work.category);
         console.log(mapcategories)
@@ -20,10 +27,7 @@ const categories = await reponse_c.json();
         console.log(monSet)
 */
 
-//---------- DEFINITIONS DES METHODES ----------------------------------------------------------------------------
-
-// Fonction de connexion de l'utilisateur
-function pressLogin() {
+function pressLogin() {     // Apporte les modifications du DOM suite à connexion réussie
     baliseLogin.innerText = "";
     baliseMessageLogout.innerText = "Connecté";
     baliseMessageLogout.style = "color: green";
@@ -38,8 +42,7 @@ function pressLogin() {
         baliseModifier.style="display:inline";
     }, 1000);
 }
-// Fonction de déconnexion de l'utilisateur
-function pressLogout() {
+function pressLogout() {    // Apporte les modifications du DOM et efface le token suite à demande de déconnexion
     window.localStorage.removeItem("token");
     baliseLogin.innerText = "";
     baliseMessageLogout.innerText = "Déconnexion...";
@@ -55,8 +58,7 @@ function pressLogout() {
     console.log("Disconnect request. --> Token deleted ! = "+window.localStorage.getItem("token")+
         " --> Login link reappears in the navigation menu. And edit mode desactivated.")
 }
-// Fonction de vérification Si l'utilisateur est connecté : vérification de la validité du token
-function loginVerification () {
+function loginVerification () {     // Vérifie si l'utilisateur est connecté et appel les fonctions nécessaires
     if (window.localStorage.getItem("token") !== null) {
         const token = JSON.parse(window.localStorage.getItem("token")).token;
         const dateConnected = JSON.parse(window.localStorage.getItem("token")).date;
@@ -89,10 +91,8 @@ function loginVerification () {
         console.log("No token exists ! --> Edit mode hidden.");
     };
 };
-// Fonction permettant de générer la galerie des travaux
-export async function generateGallery(works) {
-
-    document.querySelector(".gallery").innerHTML = '' //vide le contenu gallery
+export async function generateGallery(works) {  // Affiche la liste des tarvaux dans la galerie
+    gallery.innerHTML = '' //vide le contenu gallery
     for (let i=0; i < works.length; i++) {
         const baliseFigure = document.createElement("figure");
         const baliseImg = document.createElement("img");
@@ -100,15 +100,13 @@ export async function generateGallery(works) {
         baliseImg.alt = works[i].title;
         const baliseFigcaption = document.createElement("figcaption");
         baliseFigcaption.innerText = works[i].title;
-            let sectionCard = document.querySelector(".gallery");
-            sectionCard.appendChild(baliseFigure);
+            gallery.appendChild(baliseFigure);
             baliseFigure.appendChild(baliseImg);
             baliseFigure.appendChild(baliseFigcaption);
     }
     console.log("Regenerated gallery")
 };
-// Fonction permettant la création des boutons type radio des catégories récupérées
-function generateFiltre(categories) {
+function generateFiltre(categories) {   // Affiche les boutons radio des filtres
     //--> insertion de "Tous" dans la liste des catégories
     categories.unshift({ id: 0, name: "Tous" });
     //Création balise ul
@@ -135,20 +133,18 @@ function generateFiltre(categories) {
     }
 console.log("Regenerated category buttons")
 };
-//----------------------------------------------------------------------------------------------------------------
 
-// Vérification de cennexion de l'utilisateur : S'il n'y a un token, on vérifie sa validdité.
+//---------- GESTION EVENEMENTIELLE -------------------------------------------------------------------------------
+
+//--> 1er appel de fonction au chargement de la page
 loginVerification()
-//--> Appel de la methode pour le 1er affichage
-generateGallery(works);
-//--> Appel de la methode pour l'affichage des boutons
+generateGallery(works); 
 generateFiltre(categories);
-// sélection du bouton "Tous" par défaut
-const baliseInputTous = document.getElementById("Tous").checked = true;
 
-// Ecouteur d'événement sur les boutons radio et appel de la methode pour filtrer
+const baliseInputTous = document.getElementById("Tous").checked = true; // Focus sur le bouton "Tous"
+
 const boutonFiltrer = document.querySelector("#Ul-filtre");
-boutonFiltrer.addEventListener("change", function () {
+boutonFiltrer.addEventListener("change", function () {  // Regénére la galerie filtrée lors du changement de selection d'un bouton radio 
     let boutonRadio = document.querySelectorAll('input[name="lienfiltre"]')
     for (let i = 0; i < boutonRadio.length; i++) {
         if (boutonRadio[i].checked) {

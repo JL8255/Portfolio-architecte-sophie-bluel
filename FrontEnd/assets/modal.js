@@ -94,7 +94,7 @@ async function closeModal2() {
     console.log('Modal "2" closed successfully');
 }
 // Définition de la fonction permettant de générer la galerie des photos dans contentmodal-js.
-async function generatePicture(modalImg) {
+function generatePicture(modalImg) {
     document.getElementById("contentmodal-js").innerHTML = ""; //vide le contenu gallery
     for (let i=0; i < modalImg.length; i++) {
         const baliseDiv = document.createElement("button");
@@ -192,7 +192,6 @@ async function createImg(chargeUtile) {
         method: "POST",
         headers: {
             accept: "application/json",
-            //"Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
         },
         body: chargeUtile,
@@ -227,8 +226,8 @@ async function createImg(chargeUtile) {
 // 1er Affichage de la galerie d'image
 generatePicture(modalImg);
 // Ecouteur d'événement sur les balises cliquables des modales 1 et 2 et le bouton modifier de l'index avec appels de fonctions
-boutonModeEdition.addEventListener('click', openModal1)
-boutonModifier.addEventListener('click', openModal1)
+//boutonModeEdition.addEventListener('click', openModal1)
+//boutonModifier.addEventListener('click', openModal1)
 modal1.addEventListener('click', closeModal1)
 modal1.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
 modal1.querySelector('.js-modal1-close').addEventListener('click', closeModal1)
@@ -241,7 +240,7 @@ modal2.querySelector('.js-previous-modal').addEventListener('click', openModal1)
 
 // Ecouteur d'événement sur la touche clavier préssée
 window.addEventListener('keydown', function (event) {
-    if (event.key === "Tab"/* && modal !== null*/) {
+    if (event.key === "Tab") {
         console.log("TAB pressed")
         focusModal(event) // Tabulation ou shift+Tab déplace le focus sur l'index suivant ou précèdent
     }
