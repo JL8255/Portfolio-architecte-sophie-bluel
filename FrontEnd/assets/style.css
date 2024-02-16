@@ -277,6 +277,7 @@ input[type="radio"]:hover + label  {
 	color: red;
 	margin-bottom: 10px;
 	line-height: 20px;
+	text-align: center;
 }
 
 #messageConnexion {
@@ -290,20 +291,20 @@ input[type="radio"]:hover + label  {
 #login h2 {
 	margin: 120px 0px 20px 0px;
 }
-#contact form, #login form, #contentmodal2 form {
+#contact form, #login form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input, #login input, #contentmodal2 input, #contentmodal2 select {
+#contact input, #login input, #formModal input, #formModal select {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label, #login label, #contentmodal2 label {
+#contact label, #login label {
 	margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -350,14 +351,14 @@ footer nav ul {
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
-	animation: fadeIn .3s both; /*permet de lancer l'animation définie "fadeIn" avec "both" de opacity 0 à 1 */
+	animation: fadeIn .2s both; /*permet de lancer l'animation définie "fadeIn" avec "both" de opacity 0 à 1 */
 }
 
 .modal h3 {
 	font-family: "work sans";
 }
 
-.modal-wrapper {
+#modal-wrapper {
 	font-family: "syne";
 	display: flex;
 	flex-direction: column;
@@ -365,58 +366,51 @@ footer nav ul {
 	overflow: auto; /*barre de défilement en cas de débordement*/
 	width: 525px;
 	padding: 15px 15px 30px 20px;
-	/*max-width: calc(100vw - 20px);*/
-	/*max-height: calc(100vh - 20px);*/
+	max-width: calc(100vw - 20px);
+	max-height: calc(100vh - 120px);
 	background-color: var(--modal-bg-color);
 	border-radius: 10px 10px 10px 10px;
-	/*animation: slideFromTop .3s both .1s;*/
-	animation: scaleGreat .3s both .1s;
+	animation: scaleGreat .2s both .1s;
+	
 }
-.content-modal1-close {
+
+.content-modal-close {
 	width: 100%;
 	display: flex;
-	flex-direction: row;
-	justify-content: end;
-	align-items: center;
-}
-.content-modal2-close {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
+	flex-direction: row-reverse;
 	justify-content: space-between;
 	align-items: center;
 }
-.js-modal1-close, .js-modal2-close, .js-previous-modal {
+
+#js-modal-close {
 	border: none;
 	background-color: var(--modal-bg-color);
 	font-size: 16px;
 }
 
-#contentmodal, #contentmodal2 {
-	width: 80%;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding: 0px 0px 0px 0px;
-}
-
-#contentmodal-js {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding: 0px 0px 0px 0px;
-}
-
-#contentmodal2 form {
-	width: 100%;
-	margin: 0;
-}
-
-#titlemodal1 {
+#titlemodal {
 	margin-bottom: 30px;
 }
-
+#js-modal-close, #js-previous-modal {
+	border: none;
+	background-color: var(--modal-bg-color);
+	font-size: 16px;
+}
+#button-modal, #buttonValider {
+	width: 50%;
+	background-color: #1D6154;
+	border: none;
+	margin: 0px 8px 0px 8px;
+	border-radius: 20px 20px 20px 20px;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 12px;
+	color: var(--modal-bg-color);
+	padding: 6px 35px 6px 35px;
+}
+#buttonValider {
+	margin-top: 30px;
+}
 .content-modalImg {
 	display:flex;
 	box-sizing: border-box;
@@ -452,34 +446,9 @@ footer nav ul {
 	position: absolute;
 	z-index: 1;
 }
-.content-modalButton {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	margin-top: 33px;
-	padding-top: 30px;
-	border-top: 1px solid rgb(199, 199, 199);
+#labelFileImg, #labelCat{
+margin: 2em 0 1em 0;
 }
-
-#boutonAjouterPhoto, #modal2Button {
-	border: none;
-	margin: 0px 8px 0px 8px;
-	border-radius: 20px 20px 20px 20px;
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 12px;
-	color: var(--modal-bg-color);
-	padding: 6px 35px 6px 35px;
-}
-
-#boutonAjouterPhoto {
-	background-color: #1D6154;
-}
-
-#modal2Button {
-	background-color: gray;
-}
-
 #labelFileImage {
 	display:flex;
 	flex-direction: column;
@@ -487,6 +456,7 @@ footer nav ul {
 	align-items: center;
 	width: 100%;
 	height: 175px;
+	margin: 0px 0px 0px 0px;
 	padding: 15px 0px 15px 0px;
 	background-color: #E8F1F6;
 	border-radius: 5px 5px 5px 5px;
@@ -503,7 +473,7 @@ footer nav ul {
 
 #labelFileImage i {
 	margin: 0;
-	color: rgb(199, 199, 199);
+	color: #A7A7A7;
 	font-size: 75px;
 }
 
@@ -511,7 +481,35 @@ footer nav ul {
 	color: gray;
 	font-size: 10px;
 }
+#contentmodal {
+	width: 80%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 0px 0px 0px 0px;
+}
 
+#contentmodal-js {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 0px 0px 0px 0px;
+}
+#content-modalButton {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 33px;
+	padding-top: 30px;
+	border-top: 1px solid rgb(199, 199, 199);
+}
+#fileImg {
+	width: 100%;
+	max-height: 0px;
+}
 #ajouterPhoto  {
 	background-color: rgb(199, 199, 199);
 	margin: 0px 8px 0px 8px;
@@ -523,34 +521,44 @@ footer nav ul {
 	color: rgb(43, 91, 105);
 	padding: 8px 30px 8px 30px;
 }
-
-#fileImg {
-	width: 100%;
-	max-height: 0px;
-}
-
 #categorie {
 	background-color: var(--modal-bg-color);
 	margin-bottom: 25px;
 }
 
-#messageFormat, #messageSize {
+#messageFormat, #messageSize, #messageSent {
 	color: red;
 	line-height: 20px;
+	text-align: center;
+}
+#messageSent {
+	margin-top: 10px;
+}
+#formModal {
+	width: 100%;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+#content-buttonForm {
+	display: flex;
+	justify-content: center;
+	border-top: 1px solid rgb(199, 199, 199);
+	margin-top: 30px;
 }
 
 /**:focus {
-	box-shadow: 0 0 10px blue;
+	border: 1px solid blue;
 }*/
 
 	/*lors de la fermeture de la modale*/
 
-.modal[aria-hidden="true"] {
+
+#modal[aria-hidden="true"] {
 	animation-name: fadeOut;
 }
 
-.modal[aria-hidden="true"] .modal-wrapper {
-	/*animation-name: slideToBottom;*/
+#modal[aria-hidden="true"] #modal-wrapper {
 	animation-name: scaleLittle;
 }
 
@@ -564,16 +572,6 @@ footer nav ul {
 @keyframes fadeOut {
 	from {opacity: 1;}
 	to {opacity: 0;}
-}
-
-@keyframes slideFromTop {
-	from {transform: translateY(-50px);}
-	to {transform: translateY(0px);}
-}
-
-@keyframes slideToBottom {
-	from {transform: translateY(0px);}
-	to {transform: translateY(50px);}
 }
 
 @keyframes scaleGreat {
