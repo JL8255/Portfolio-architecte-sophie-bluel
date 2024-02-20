@@ -195,6 +195,9 @@ async function createFormAddImage() {     // Développe le formulaire d'entrées
     baliseForm.style = "display:flex";
     boutonRetour.style = "display:flex";
     baliseForm.reset();
+    messageFormat.innerText =''
+    messageSize.innerText =''
+    messageSent.innerHTML =''
     baliseTitre.innertext = "";
     baliseTitre.innerText = "Ajouter une photo";
     divBoutonModal.style = "display:none";
