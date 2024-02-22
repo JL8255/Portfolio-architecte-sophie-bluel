@@ -13,7 +13,6 @@ export async function recoveryWorks() {    //   GET REQUEST API : Récupère la 
     const reponseWJson = await reponseW.json()
     return reponseWJson
 }; const works = await recoveryWorks()
-
 export async function recoveryCategories() {    //   GET REQUEST API : Récupère la liste des catégories à partir de l'API
     const reponseC = await fetch("http://localhost:5678/api/categories")
     const reponseCJson = await reponseC.json()
@@ -136,7 +135,7 @@ console.log("Regenerated category buttons")
 
 //---------- GESTION EVENEMENTIELLE -------------------------------------------------------------------------------
 
-//--> 1er appel de fonction au chargement de la page
+// Appel de fonction au chargement de la page
 loginVerification()
 generateGallery(works); 
 generateFiltre(categories);
@@ -152,15 +151,14 @@ boutonFiltrer.addEventListener("change", function () {  // Regénére la galerie
             break
         }
     }
+    if (boutonChecked === "Tous") {
+        console.log('Button "Tous" checked. the gallery will be completely regenerated -->');
+        generateGallery(works)
+    } else {
     const worksFiltres = works.filter(function (work) {
-        return work.category.name === boutonChecked;
-    });
-        if (boutonChecked === "Tous") {
-            console.log('Button "Tous" checked. the gallery will be completely regenerated -->');
-            generateGallery(works)
-        } else {
-        console.log('Button "'+boutonChecked+'" checked. The gallery will be filtered and regenerated -->');    
-        generateGallery(worksFiltres)
-        };
+    return work.category.name === boutonChecked});
+    console.log('Button "'+boutonChecked+'" checked. The gallery will be filtered and regenerated -->');    
+    generateGallery(worksFiltres)
+    };
     document.location.href="#portfolio";
 });
