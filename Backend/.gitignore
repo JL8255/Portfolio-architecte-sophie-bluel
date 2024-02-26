@@ -2,6 +2,6 @@ node_modules
 
 !images/.gitkeep
 
-# Ne pas prendre en compte le fichier .env (variable de stockage du token) dans le repo = sécurité
+# Ne pas prendre en compte tous le fichier .env (ici utilisé pour la variable de stockage du token : à ne pas commiter dans le repo = sécurité)
 
-!Backend/.env
+.env
