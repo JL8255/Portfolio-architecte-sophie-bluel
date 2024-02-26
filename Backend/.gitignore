@@ -4,4 +4,4 @@ node_modules
 
 # Ne pas prendre en compte le fichier .env (variable de stockage du token) dans le repo = sécurité
 
-!.env
+!Backend/.env
